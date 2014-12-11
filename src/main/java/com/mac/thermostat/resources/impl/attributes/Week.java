@@ -5,14 +5,38 @@
  */
 package com.mac.thermostat.resources.impl.attributes;
 
-import com.mac.thermostat.resources.impl.attributes.Day.DayType;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mac.thermostat.resources.impl.attributes.DayProgram.DayType;
+import com.mac.thermostat.resources.impl.json.deserializers.WeekDeserializer;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  *
  * @author Mac
  */
+@JsonDeserialize(using = WeekDeserializer.class)
 public class Week {
     
-    private Map<DayType, Day> week;
+    private Map<DayType, DayProgram> week;
+    
+    public Week(){
+        this.week = new HashMap();
+    }
+    
+    public Week(Map<DayType, DayProgram> week){
+        this.week = week;
+    }
+    
+    public void putDay(DayType type, DayProgram prog){
+        this.week.put(type, prog);
+    }
+    
+    public DayProgram getProgram(DayType dayType){
+        return this.week.get(dayType);
+    }
+    
+    public Temperature getTempAtDayForTime(DayType day, Minute time){
+        return this.week.get(day).getTempAtTime(time);
+    }
 }

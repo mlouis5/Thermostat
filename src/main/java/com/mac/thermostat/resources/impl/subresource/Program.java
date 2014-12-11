@@ -6,19 +6,28 @@
 package com.mac.thermostat.resources.impl.subresource;
 
 import com.mac.thermostat.resources.Resource;
+import com.mac.thermostat.resources.annotations.RequestType;
+import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.impl.Thermostat;
-import com.mac.thermostat.resources.impl.attributes.Day;
-import com.mac.thermostat.resources.impl.attributes.Day.DayType;
+import com.mac.thermostat.resources.impl.attributes.DayProgram;
+import com.mac.thermostat.resources.impl.attributes.DayProgram.DayType;
 import com.mac.thermostat.resources.impl.attributes.Week;
 import com.mac.thermostat.resources.impl.attributes.enums.ProgramMode;
 import com.mac.thermostat.resources.impl.utilities.ConcreteResourceURI;
 import com.mac.thermostat.resources.impl.utilities.ResourceURI;
 import java.util.Objects;
+import org.springframework.web.client.RestTemplate;
 
 /**
- *
+ * 2.2.3 Thermostat Program Resource
+ * The thermostat maintains two programs – a heat program and a cool program.<br>
+ * Every program entry consists of time and the corresponding temperature<br>
+ * setpoint. Every day of the week can have a set of time-setpoint pair<br>
+ * programmed in the thermostat.
+ * 
  * @author Mac
  */
+@RequestType(types = {RestType.GET, RestType.POST})
 public class Program implements Resource {
 
     private ResourceURI URI;
@@ -31,13 +40,15 @@ public class Program implements Resource {
         URI = Thermostat.URI.clone().path("program");
     }
 
-    public Program mode(ProgramMode mode) {
-        if(!Objects.equals(this.mode, mode)){
+    public Program mode(ProgramMode mode) throws Exception {
+        if(Objects.nonNull(mode) && !Objects.equals(this.mode, mode)){
             this.mode = mode;
             URI = Thermostat.URI.clone().path("program");
-            URI.path(mode.name());
+            URI.path(mode.name().toLowerCase()).build();
             
             //make call to get program by week
+            RestTemplate template = new RestTemplate();
+            week = template.getForObject(URI.getUriWithHttp(), Week.class);
         }  
         return this;
     }
@@ -48,12 +59,13 @@ public class Program implements Resource {
     }
 
     public Week getWeek() {
-
-        return null;
+        return week;
     }
 
-    public Day getDay() {
-
+    public DayProgram getDay() {
+        if(Objects.nonNull(week)){
+            return week.getProgram(dayType);
+        }
         return null;
     }
 
