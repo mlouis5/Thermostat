@@ -25,7 +25,6 @@ public class Program implements Resource {
 
     private ProgramMode mode;
     private Week week;
-    private static final String dayResource = "day";
     private DayType dayType;
 
     public Program() {
