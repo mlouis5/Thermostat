@@ -13,11 +13,7 @@ import com.mac.thermostat.resources.impl.attributes.Week;
 import com.mac.thermostat.resources.impl.attributes.enums.ProgramMode;
 import com.mac.thermostat.resources.impl.utilities.ConcreteResourceURI;
 import com.mac.thermostat.resources.impl.utilities.ResourceURI;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -25,49 +21,56 @@ import java.util.logging.Logger;
  */
 public class Program implements Resource {
 
-    private static final ResourceURI URI;
-    
+    private ResourceURI URI;
+
     private ProgramMode mode;
     private Week week;
     private static final String dayResource = "day";
-    private Day day;
     private DayType dayType;
 
-    static {
+    public Program() {
         URI = Thermostat.URI.clone().path("program");
     }
-    
-    public Program mode(ProgramMode mode){
-        this.mode = mode;
-        URI.path(mode.name());
+
+    public Program mode(ProgramMode mode) {
+        if(!Objects.equals(this.mode, mode)){
+            this.mode = mode;
+            URI = Thermostat.URI.clone().path("program");
+            URI.path(mode.name());
+            
+            //make call to get program by week
+        }  
         return this;
     }
-    
-    public Program day(DayType day) throws Exception{
+
+    public Program day(DayType day) throws Exception {
         this.dayType = day;
-        URI.path(dayResource);
-        URI.build();
         return this;
     }
-    
-    public Program get(){
-        //implement rest call to retrieve data for this program.
-        return this;
+
+    public Week getWeek() {
+
+        return null;
+    }
+
+    public Day getDay() {
+
+        return null;
     }
 
     @Override
     public ResourceURI builder() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new ConcreteResourceURI();
     }
 
     @Override
     public void setURI(ResourceURI uri) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.URI = uri;
     }
 
     @Override
-    public String getUriString() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String getUriString() throws Exception {
+        return URI.getUriWithHttp();
     }
 
 }

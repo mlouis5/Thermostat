@@ -28,4 +28,6 @@ public interface ResourceURI {
     String getUriWithoutHttp() throws Exception;
     
     ResourceURI clone();
+    
+    boolean isBuilt();
 }

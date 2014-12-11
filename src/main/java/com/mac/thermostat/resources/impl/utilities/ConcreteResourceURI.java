@@ -88,4 +88,9 @@ public class ConcreteResourceURI implements ResourceURI {
         uri.path(this.getPath());
         return uri;
     }
+
+    @Override
+    public boolean isBuilt() {
+        return isBuilt;
+    }
 }

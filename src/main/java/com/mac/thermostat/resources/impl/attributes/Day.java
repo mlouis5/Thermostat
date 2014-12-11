@@ -22,6 +22,14 @@ public class Day {
         DayType(int dayVal){
             this.dayVal = dayVal;
         }
+        
+        public int dayValue(){
+            return dayVal;
+        }
+        
+        public String value(){
+            return String.valueOf(dayVal);
+        }
     }
     
     @JsonIgnore
