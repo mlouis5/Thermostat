@@ -5,7 +5,7 @@
  */
 package com.mac.thermostat.resources.annotations;
 
-import com.mac.thermostat.resources.annotations.enums.RestType;
+import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -19,6 +19,6 @@ import java.lang.annotation.Target;
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target(value = {ElementType.FIELD, ElementType.TYPE})
 @Documented
-public @interface RequestType {
-    RestType[] types() default {RestType.GET};
+public @interface FeatureAvailability {
+    ThermostatModel[] model() default {ThermostatModel.CT80B};
 }

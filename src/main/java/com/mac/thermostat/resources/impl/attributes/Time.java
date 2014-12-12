@@ -5,10 +5,13 @@
  */
 package com.mac.thermostat.resources.impl.attributes;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  *
  * @author Mac
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Time {
   
     /**

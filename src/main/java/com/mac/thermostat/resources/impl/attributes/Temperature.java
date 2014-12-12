@@ -5,10 +5,13 @@
  */
 package com.mac.thermostat.resources.impl.attributes;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  *
  * @author MacDerson
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Temperature {
 
     private static final double celciusPercent = .5556;

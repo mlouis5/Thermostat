@@ -5,18 +5,17 @@
  */
 package com.mac.thermostat.resources.impl.attributes;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
-import java.text.DecimalFormat;
 import java.util.Objects;
-import java.util.Random;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  *
  * @author MacDerson
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Minute {
 
     private static final double WHOLE_DAY = 1440;

@@ -11,8 +11,9 @@ import com.mac.thermostat.resources.impl.utilities.ResourceURI;
  *
  * @author Mac
  */
-public interface Resource {
+public interface ManipulableResource extends Resource{
     
-    String getUriString() throws Exception;
-      
+    ResourceURI builder();
+    
+    void setURI(ResourceURI uri);
 }

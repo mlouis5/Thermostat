@@ -6,6 +6,7 @@
 package com.mac.thermostat.resources.impl.attributes;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,16 +17,21 @@ import java.util.Set;
  *
  * @author Mac
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DayProgram {
 
     public enum DayType {
 
-        MONDAY(0), TUESDAY(1), WEDNESDAY(2), THURSDAY(3), FRIDAY(4), SATURDAY(5), SUNDAY(6);
+        MONDAY(0, "MON"), TUESDAY(1, "TUE"), WEDNESDAY(2, "WED"),
+        THURSDAY(3, "THU"), FRIDAY(4, "FRI"), SATURDAY(5, "SAT"),
+        SUNDAY(6, "SUN");
 
         private int dayVal;
+        private String abbr;
 
-        DayType(int dayVal) {
+        DayType(int dayVal, String abbr) {
             this.dayVal = dayVal;
+            this.abbr = abbr;
         }
 
         public int dayValue() {
@@ -34,6 +40,10 @@ public class DayProgram {
 
         public String value() {
             return String.valueOf(dayVal);
+        }
+        
+        public String abbreviation(){
+            return abbr;
         }
     }
 
@@ -57,16 +67,16 @@ public class DayProgram {
             values.put(minutes.get(i), temperatures.get(i));
         }
     }
-    
-    public DayType getDayType(){
+
+    public DayType getDayType() {
         return day;
     }
-    
-    public Temperature getTempAtTime(Minute minute){
+
+    public Temperature getTempAtTime(Minute minute) {
         return values.get(minute);
     }
 
-    public Set<Entry<Minute, Temperature>> getEntries(){
+    public Set<Entry<Minute, Temperature>> getEntries() {
         return values.entrySet();
     }
 }

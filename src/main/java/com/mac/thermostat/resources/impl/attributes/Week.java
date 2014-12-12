@@ -5,20 +5,26 @@
  */
 package com.mac.thermostat.resources.impl.attributes;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.mac.thermostat.resources.impl.attributes.DayProgram.DayType;
 import com.mac.thermostat.resources.impl.json.deserializers.WeekDeserializer;
+import com.mac.thermostat.resources.impl.json.serializers.WeekSerializer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  *
  * @author Mac
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonSerialize(using = WeekSerializer.class)
 @JsonDeserialize(using = WeekDeserializer.class)
 public class Week {
     
-    private Map<DayType, DayProgram> week;
+    private final Map<DayType, DayProgram> week;
     
     public Week(){
         this.week = new HashMap();
@@ -38,5 +44,9 @@ public class Week {
     
     public Temperature getTempAtDayForTime(DayType day, Minute time){
         return this.week.get(day).getTempAtTime(time);
+    }
+    
+    public int hash(){
+        return Objects.hashCode(this.week);
     }
 }
