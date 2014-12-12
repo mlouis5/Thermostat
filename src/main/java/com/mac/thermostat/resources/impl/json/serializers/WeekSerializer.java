@@ -13,7 +13,7 @@ import com.mac.thermostat.resources.impl.attributes.DayProgram;
 import com.mac.thermostat.resources.impl.attributes.DayProgram.DayType;
 import com.mac.thermostat.resources.impl.attributes.Minute;
 import com.mac.thermostat.resources.impl.attributes.Temperature;
-import com.mac.thermostat.resources.impl.attributes.Week;
+import com.mac.thermostat.resources.impl.attributes.WeekProgram;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -24,10 +24,10 @@ import java.util.Set;
  *
  * @author MacDerson
  */
-public class WeekSerializer extends JsonSerializer<Week> {
+public class WeekSerializer extends JsonSerializer<WeekProgram> {
 
     @Override
-    public void serialize(Week t, JsonGenerator jg, SerializerProvider sp) throws IOException, JsonProcessingException {
+    public void serialize(WeekProgram t, JsonGenerator jg, SerializerProvider sp) throws IOException, JsonProcessingException {
         
         jg.writeStartObject();
         for(DayType type : DayType.values()){

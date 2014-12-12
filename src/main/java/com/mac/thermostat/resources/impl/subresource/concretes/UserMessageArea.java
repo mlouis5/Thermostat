@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mac.thermostat.resources.impl.subresource.impl;
+package com.mac.thermostat.resources.impl.subresource.concretes;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mac.thermostat.resources.Resource;
+import com.mac.thermostat.resources.Poster;
 import com.mac.thermostat.resources.annotations.FeatureAvailability;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
 import com.mac.thermostat.resources.impl.subresource.MessageArea;
+import java.util.Objects;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -19,7 +20,7 @@ import org.springframework.web.client.RestTemplate;
 @FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,
     ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserMessageArea extends MessageArea {
+public class UserMessageArea extends MessageArea implements Poster<UserMessageArea, UserMessageArea>{
 
     public UserMessageArea() throws Exception {
         super("uma");
@@ -36,16 +37,15 @@ public class UserMessageArea extends MessageArea {
     public void setMessage(String msg) {
         this.message = msg;
     }
-    
-    @Override
-    public Resource get() throws Exception {
-        return null;
-    }
 
     @Override
-    public Resource post() throws Exception {
+    public UserMessageArea post(UserMessageArea resource) throws Exception {
         RestTemplate template = new RestTemplate();
-        return template.getForObject(getUriString(), UserMessageArea.class);
+        if (Objects.isNull(resource)) {
+            return template.postForObject(getUriString(), this, UserMessageArea.class);
+        } else {
+            return template.postForObject(getUriString(), resource, resource.getClass());
+        }
     }
 
 }

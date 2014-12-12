@@ -22,15 +22,15 @@ import java.util.Objects;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(using = WeekSerializer.class)
 @JsonDeserialize(using = WeekDeserializer.class)
-public class Week {
+public class WeekProgram {
     
     private final Map<DayType, DayProgram> week;
     
-    public Week(){
+    public WeekProgram(){
         this.week = new HashMap();
     }
     
-    public Week(Map<DayType, DayProgram> week){
+    public WeekProgram(Map<DayType, DayProgram> week){
         this.week = week;
     }
     

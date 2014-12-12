@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mac.thermostat.resources.impl.subresource.impl;
+package com.mac.thermostat.resources.impl.subresource.concretes;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mac.thermostat.resources.Requestor;
+import com.mac.thermostat.resources.Getter;
+import com.mac.thermostat.resources.Poster;
 import com.mac.thermostat.resources.Resource;
 import com.mac.thermostat.resources.annotations.AttributeInterpreter;
 import com.mac.thermostat.resources.annotations.FeatureAvailability;
@@ -18,6 +19,7 @@ import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
 import com.mac.thermostat.resources.impl.Thermostat;
 import com.mac.thermostat.resources.impl.utilities.ResourceURI;
+import java.util.Objects;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -27,7 +29,7 @@ import org.springframework.web.client.RestTemplate;
 @FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,
     ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Lock implements Resource, Requestor<Lock>{
+public class Lock implements Resource, Getter<Lock>, Poster<Lock, Lock>{
 
     @JsonIgnore
     private final ResourceURI URI;
@@ -64,9 +66,13 @@ public class Lock implements Resource, Requestor<Lock>{
     }
 
     @Override
-    public Lock post() throws Exception {
+    public Lock post(Lock resource) throws Exception {
         RestTemplate template = new RestTemplate();
-        return template.postForObject(getUriString(), this, Lock.class);
+        if (Objects.isNull(resource)) {
+            return template.postForObject(getUriString(), this, Lock.class);
+        } else {
+            return template.postForObject(getUriString(), resource, resource.getClass());
+        }
     }
     
 }

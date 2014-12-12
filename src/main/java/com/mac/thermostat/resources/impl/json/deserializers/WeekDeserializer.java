@@ -14,7 +14,7 @@ import com.mac.thermostat.resources.impl.attributes.DayProgram;
 import com.mac.thermostat.resources.impl.attributes.DayProgram.DayType;
 import com.mac.thermostat.resources.impl.attributes.Minute;
 import com.mac.thermostat.resources.impl.attributes.Temperature;
-import com.mac.thermostat.resources.impl.attributes.Week;
+import com.mac.thermostat.resources.impl.attributes.WeekProgram;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,10 +26,10 @@ import java.util.Map;
  *
  * @author Mac
  */
-public class WeekDeserializer extends JsonDeserializer<Week> {
+public class WeekDeserializer extends JsonDeserializer<WeekProgram> {
 
     @Override
-    public Week deserialize(JsonParser jp, DeserializationContext dc) throws IOException, JsonProcessingException {
+    public WeekProgram deserialize(JsonParser jp, DeserializationContext dc) throws IOException, JsonProcessingException {
         JsonNode rootNode = jp.getCodec().readTree(jp);
         
         Map<DayType, DayProgram> week = new HashMap(7);
@@ -58,7 +58,7 @@ public class WeekDeserializer extends JsonDeserializer<Week> {
                 week.put(dayType, day);
             }
         }        
-        return new Week(week);
+        return new WeekProgram(week);
     }
     
 }

@@ -8,7 +8,6 @@ package com.mac.thermostat.resources.impl.subresource;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mac.thermostat.resources.Requestor;
 import com.mac.thermostat.resources.Resource;
 import com.mac.thermostat.resources.annotations.RequestType;
 import com.mac.thermostat.resources.annotations.enums.RestType;
@@ -25,7 +24,7 @@ import com.mac.thermostat.resources.impl.utilities.ResourceURI;
  * @author Mac
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public abstract class MessageArea implements Resource, Requestor{
+public abstract class MessageArea implements Resource{
 
     @JsonIgnore
     private final ResourceURI URI;

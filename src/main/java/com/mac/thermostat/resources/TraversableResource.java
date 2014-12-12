@@ -5,14 +5,15 @@
  */
 package com.mac.thermostat.resources;
 
+import com.mac.thermostat.resources.impl.utilities.ResourceURI;
+
 /**
  *
  * @author Mac
- * @param <T>
  */
-public interface Requestor<T extends Resource> {
+public interface TraversableResource extends Resource{
     
-    T get() throws Exception;
+    ResourceURI builder();
     
-    T post() throws Exception;
+    void setURI(ResourceURI uri);
 }

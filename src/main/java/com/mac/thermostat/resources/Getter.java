@@ -5,15 +5,10 @@
  */
 package com.mac.thermostat.resources;
 
-import com.mac.thermostat.resources.impl.utilities.ResourceURI;
-
 /**
  *
- * @author Mac
+ * @author MacDerson
  */
-public interface ManipulableResource extends Resource{
-    
-    ResourceURI builder();
-    
-    void setURI(ResourceURI uri);
+public interface Getter<T> {
+    T get() throws Exception;
 }

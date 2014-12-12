@@ -8,18 +8,18 @@ package com.mac.thermostat.resources.impl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mac.thermostat.resources.ManipulableResource;
+import com.mac.thermostat.resources.TraversableResource;
 import com.mac.thermostat.resources.annotations.FeatureAvailability;
 import com.mac.thermostat.resources.annotations.RequestType;
 import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
 import com.mac.thermostat.resources.impl.attributes.Time;
 import com.mac.thermostat.resources.impl.subresource.MessageArea;
-import com.mac.thermostat.resources.impl.subresource.impl.LED;
-import com.mac.thermostat.resources.impl.subresource.impl.Model;
-import com.mac.thermostat.resources.impl.subresource.impl.PriceMessageArea;
-import com.mac.thermostat.resources.impl.subresource.impl.Program;
-import com.mac.thermostat.resources.impl.subresource.impl.UserMessageArea;
+import com.mac.thermostat.resources.impl.subresource.concretes.LED;
+import com.mac.thermostat.resources.impl.subresource.concretes.Model;
+import com.mac.thermostat.resources.impl.subresource.concretes.PriceMessageArea;
+import com.mac.thermostat.resources.impl.subresource.concretes.Program;
+import com.mac.thermostat.resources.impl.subresource.concretes.UserMessageArea;
 import com.mac.thermostat.resources.impl.utilities.ConcreteResourceURI;
 import com.mac.thermostat.resources.impl.utilities.ResourceURI;
 import java.net.InetAddress;
@@ -44,7 +44,7 @@ import java.util.logging.Logger;
 @FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,
     ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Thermostat implements ManipulableResource {
+public class Thermostat implements TraversableResource {
 
     public static final ResourceURI URI;
 
