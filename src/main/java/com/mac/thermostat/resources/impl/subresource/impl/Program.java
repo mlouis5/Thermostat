@@ -7,8 +7,10 @@ package com.mac.thermostat.resources.impl.subresource.impl;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mac.thermostat.resources.ManipulableResource;
+import com.mac.thermostat.resources.annotations.FeatureAvailability;
 import com.mac.thermostat.resources.annotations.RequestType;
 import com.mac.thermostat.resources.annotations.enums.RestType;
+import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
 import com.mac.thermostat.resources.impl.Thermostat;
 import com.mac.thermostat.resources.impl.attributes.DayProgram;
 import com.mac.thermostat.resources.impl.attributes.DayProgram.DayType;
@@ -29,6 +31,8 @@ import org.springframework.web.client.RestTemplate;
  *
  * @author Mac
  */
+@FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,
+    ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
 @RequestType(types = {RestType.GET, RestType.POST})
 public class Program implements ManipulableResource {

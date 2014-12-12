@@ -12,6 +12,7 @@ import com.mac.thermostat.resources.Requestor;
 import com.mac.thermostat.resources.Resource;
 import com.mac.thermostat.resources.annotations.FeatureAvailability;
 import com.mac.thermostat.resources.annotations.RequestType;
+import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
 import com.mac.thermostat.resources.impl.Thermostat;
 import com.mac.thermostat.resources.impl.utilities.ResourceURI;
@@ -24,37 +25,43 @@ import org.springframework.web.client.RestTemplate;
 @FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,
     ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
-@RequestType
-public class Model implements Resource, Requestor{
-    
+public class Lock implements Resource, Requestor<Lock>{
+
     @JsonIgnore
-    private static ResourceURI URI;
+    private final ResourceURI URI;
     
-    @JsonProperty("model")
-    public String model;
-        
-    public Model() throws Exception {
-        URI = Thermostat.URI.clone().path("model").build();
-    }
+    /**
+     * Description: Thermostat Lock Mode
+     * Request Type: POST
+     * Data Format: Integer that represents:
+     * 0 = lock disabled
+     * 1 = partial lock
+     * 2 = full lock
+     * 3 = utility lock (accessible via the radio only)
+     */
+    @RequestType(types = {RestType.GET, RestType.POST})
+    @JsonProperty("lock_mode")
+    private int lockMode;
     
-    public String getModel(){
-        return model;
+    public Lock() throws Exception{
+        URI = Thermostat.URI.clone().path("lock").build();
     }
     
     @Override
-    public Model get() throws Exception{
-        RestTemplate template = new RestTemplate();
-        return template.getForObject(URI.getUriWithHttp(), Model.class);
-    }
-    
-    @Override
-    public Resource post() throws Exception {
-        return null;
+    public String getUriString() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public String getUriString() throws Exception {
-        return URI.getUriWithHttp();
+    public Lock get() throws Exception {
+        RestTemplate template = new RestTemplate();
+        return template.getForObject(getUriString(), Lock.class);
+    }
+
+    @Override
+    public Lock post() throws Exception {
+        RestTemplate template = new RestTemplate();
+        return template.postForObject(getUriString(), this, Lock.class);
     }
     
 }

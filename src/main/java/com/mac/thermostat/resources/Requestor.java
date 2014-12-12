@@ -8,10 +8,11 @@ package com.mac.thermostat.resources;
 /**
  *
  * @author Mac
+ * @param <T>
  */
-public interface Requestor {
+public interface Requestor<T extends Resource> {
     
-    Resource get() throws Exception;
+    T get() throws Exception;
     
-    Resource post() throws Exception;
+    T post() throws Exception;
 }

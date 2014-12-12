@@ -8,8 +8,10 @@ package com.mac.thermostat.resources.impl.subresource.impl;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mac.thermostat.resources.Resource;
+import com.mac.thermostat.resources.annotations.FeatureAvailability;
 import com.mac.thermostat.resources.annotations.RequestType;
 import com.mac.thermostat.resources.annotations.enums.RestType;
+import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
 import com.mac.thermostat.resources.impl.subresource.MessageArea;
 import java.util.Objects;
 import org.springframework.web.client.RestTemplate;
@@ -18,6 +20,8 @@ import org.springframework.web.client.RestTemplate;
  *
  * @author Mac
  */
+@FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,
+    ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PriceMessageArea extends MessageArea {
 
@@ -28,7 +32,7 @@ public class PriceMessageArea extends MessageArea {
      * Value: 0 = Disable 2 = Enable
      */
     @RequestType(types = {RestType.POST})
-    @JsonProperty("message")
+    @JsonProperty("mode")
     private int mode;
 
     public PriceMessageArea() throws Exception {
