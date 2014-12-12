@@ -10,8 +10,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mac.thermostat.resources.Requestor;
 import com.mac.thermostat.resources.Resource;
+import com.mac.thermostat.resources.annotations.AttributeInterpreter;
 import com.mac.thermostat.resources.annotations.FeatureAvailability;
 import com.mac.thermostat.resources.annotations.RequestType;
+import com.mac.thermostat.resources.annotations.enums.ReadableValue;
 import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
 import com.mac.thermostat.resources.impl.Thermostat;
@@ -44,6 +46,9 @@ public class LED implements Resource, Requestor{
      * 2 – Yellow
      * 4 – Red
      */
+    @AttributeInterpreter(key = {0, 1, 2, 4}, 
+            values = {ReadableValue.OFF, ReadableValue.GREEN,
+            ReadableValue.YELLOW, ReadableValue.RED})
     @RequestType(types = {RestType.POST})
     @JsonProperty("energy_led")
     private int energyLed;

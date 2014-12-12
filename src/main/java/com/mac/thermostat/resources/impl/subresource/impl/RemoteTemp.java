@@ -10,8 +10,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mac.thermostat.resources.Requestor;
 import com.mac.thermostat.resources.Resource;
+import com.mac.thermostat.resources.annotations.AttributeInterpreter;
 import com.mac.thermostat.resources.annotations.FeatureAvailability;
 import com.mac.thermostat.resources.annotations.RequestType;
+import com.mac.thermostat.resources.annotations.enums.ReadableValue;
 import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
 import com.mac.thermostat.resources.impl.Thermostat;
@@ -40,6 +42,8 @@ public class RemoteTemp implements Resource, Requestor<RemoteTemp>{
      * Note: For POST, the only valid value is 0, which disables the remote 
      * temperature mode.
      */
+    @AttributeInterpreter(key = {0, 1}, 
+            values = {ReadableValue.DISABLED, ReadableValue.ENABLED})
     @RequestType(types = {RestType.GET, RestType.POST})
     @JsonProperty("rem_mode")
     private int remMode;

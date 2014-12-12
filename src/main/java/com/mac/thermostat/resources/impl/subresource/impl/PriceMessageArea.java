@@ -8,8 +8,10 @@ package com.mac.thermostat.resources.impl.subresource.impl;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mac.thermostat.resources.Resource;
+import com.mac.thermostat.resources.annotations.AttributeInterpreter;
 import com.mac.thermostat.resources.annotations.FeatureAvailability;
 import com.mac.thermostat.resources.annotations.RequestType;
+import com.mac.thermostat.resources.annotations.enums.ReadableValue;
 import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
 import com.mac.thermostat.resources.impl.subresource.MessageArea;
@@ -31,6 +33,8 @@ public class PriceMessageArea extends MessageArea {
      * Data Format: Integer
      * Value: 0 = Disable 2 = Enable
      */
+    @AttributeInterpreter(key = {0, 2}, 
+            values = {ReadableValue.DISABLE, ReadableValue.ENABLE})
     @RequestType(types = {RestType.POST})
     @JsonProperty("mode")
     private int mode;
