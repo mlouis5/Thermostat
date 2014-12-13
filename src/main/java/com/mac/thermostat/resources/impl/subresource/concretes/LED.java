@@ -5,19 +5,16 @@
  */
 package com.mac.thermostat.resources.impl.subresource.concretes;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mac.thermostat.resources.Poster;
-import com.mac.thermostat.resources.Resource;
 import com.mac.thermostat.resources.annotations.AttributeInterpreter;
 import com.mac.thermostat.resources.annotations.FeatureAvailability;
 import com.mac.thermostat.resources.annotations.RequestType;
 import com.mac.thermostat.resources.annotations.enums.ReadableValue;
 import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
-import com.mac.thermostat.resources.impl.Thermostat;
-import java.util.Objects;
-import org.springframework.web.client.RestTemplate;
+import com.mac.thermostat.resources.impl.utilities.SimplePoster;
 
 /**
  *
@@ -26,8 +23,10 @@ import org.springframework.web.client.RestTemplate;
 @FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,
     ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class LED implements Resource, Poster<LED, LED> {
+public class LED extends SimplePoster<LED> {
 
+    @JsonIgnore
+    private static final String RESOURCE = "led";
     /**
      * Description: Energy LED Status Code Request Type: GET Data Format:
      * Integer that represents: 0 – Off 1 – Green 2 – Yellow 4 – Red
@@ -39,6 +38,10 @@ public class LED implements Resource, Poster<LED, LED> {
     @JsonProperty("energy_led")
     private int energyLed;
 
+    public LED() throws Exception {
+        super(LED.class, RESOURCE);
+    }
+
     public int getEnergyLed() {
         return energyLed;
     }
@@ -46,20 +49,4 @@ public class LED implements Resource, Poster<LED, LED> {
     public void setEnergyLed(int energyLed) {
         this.energyLed = energyLed;
     }
-
-    @Override
-    public String getResourcePath() throws Exception {
-        return Thermostat.URI.clone().path("led").build().getUriWithHttp();
-    }
-
-    @Override
-    public LED post(LED resource) throws Exception {
-        RestTemplate template = new RestTemplate();
-        if (Objects.isNull(resource)) {
-            return template.postForObject(getResourcePath(), this, LED.class);
-        } else {
-            return template.postForObject(getResourcePath(), resource, resource.getClass());
-        }
-    }
-
 }

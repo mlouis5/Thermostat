@@ -8,16 +8,11 @@ package com.mac.thermostat.resources.impl.subresource.concretes;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mac.thermostat.resources.Getter;
-import com.mac.thermostat.resources.Poster;
-import com.mac.thermostat.resources.Resource;
 import com.mac.thermostat.resources.annotations.FeatureAvailability;
 import com.mac.thermostat.resources.annotations.RequestType;
 import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
-import com.mac.thermostat.resources.impl.Thermostat;
-import java.util.Objects;
-import org.springframework.web.client.RestTemplate;
+import com.mac.thermostat.resources.impl.utilities.SimpleRequester;
 
 /**
  * Thermostat Humidifier Setpoint<br>
@@ -29,9 +24,10 @@ import org.springframework.web.client.RestTemplate;
 @FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,
     ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class HumidifierSetpoint implements Resource, Getter<HumidifierSetpoint>,
-        Poster<HumidifierSetpoint, HumidifierSetpoint>{
+public class HumidifierSetpoint extends SimpleRequester<HumidifierSetpoint>{
 
+    @JsonIgnore
+    private static final String RESOURCE = "thumidity";
     @JsonIgnore
     private static final float MIN_T_HUMIDITY = 0f;
     @JsonIgnore
@@ -42,8 +38,12 @@ public class HumidifierSetpoint implements Resource, Getter<HumidifierSetpoint>,
      * Data Format: Float value: Value is % relative humidity from 0 to 100%
      */
     @RequestType(types = {RestType.GET, RestType.POST})
-    @JsonProperty("thumidity")
+    @JsonProperty(RESOURCE)
     private float tHumidity;
+
+    public HumidifierSetpoint() throws Exception {
+        super(HumidifierSetpoint.class, RESOURCE);
+    }
 
     public float getTHumidity() {
         return tHumidity;
@@ -53,26 +53,4 @@ public class HumidifierSetpoint implements Resource, Getter<HumidifierSetpoint>,
         this.tHumidity = tHumidity < MIN_T_HUMIDITY ? MIN_T_HUMIDITY
                 : tHumidity > MAX_T_HUMIDITY ? MAX_T_HUMIDITY : tHumidity;
     }
-
-    @Override
-    public String getResourcePath() throws Exception {
-        return Thermostat.URI.clone().path("thumidity").build().getUriWithHttp();
-    }
-
-    @Override
-    public HumidifierSetpoint get() throws Exception {
-        RestTemplate template = new RestTemplate();
-        return template.getForObject(getResourcePath(), HumidifierSetpoint.class);
-    }
-
-    @Override
-    public HumidifierSetpoint post(HumidifierSetpoint resource) throws Exception {
-        RestTemplate template = new RestTemplate();
-        if (Objects.isNull(resource)) {
-            return template.postForObject(getResourcePath(), this, HumidifierSetpoint.class);
-        } else {
-            return template.postForObject(getResourcePath(), resource, resource.getClass());
-        }
-    }
-
 }

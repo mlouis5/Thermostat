@@ -14,6 +14,7 @@ import com.mac.thermostat.resources.annotations.RequestType;
 import com.mac.thermostat.resources.annotations.enums.ReadableValue;
 import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
+import com.mac.thermostat.resources.impl.utilities.SimpleRequester;
 
 /**
  *
@@ -22,8 +23,10 @@ import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
 @FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,
     ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Humidifier {
+public class Humidifier extends SimpleRequester<Humidifier>{
 
+    @JsonIgnore
+    private static final String RESOURCE = "humidifier";
     @JsonIgnore
     private static final int MIN_HUMIDIFIER_MODE = 0;
     @JsonIgnore
@@ -40,6 +43,10 @@ public class Humidifier {
                 ReadableValue.HUMIDITY_ANYTIME})
     private int humidifierMode;
 
+    public Humidifier() throws Exception {
+        super(Humidifier.class, RESOURCE);
+    }
+
     public int getHumidifierMode() {
         return humidifierMode;
     }
@@ -49,5 +56,4 @@ public class Humidifier {
                 ? MIN_HUMIDIFIER_MODE : humidifierMode > MAX_HUMIDIFIER_MODE
                         ? MAX_HUMIDIFIER_MODE : humidifierMode;
     }
-
 }

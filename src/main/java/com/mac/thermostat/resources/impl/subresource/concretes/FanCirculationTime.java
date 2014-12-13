@@ -8,23 +8,20 @@ package com.mac.thermostat.resources.impl.subresource.concretes;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mac.thermostat.resources.Getter;
-import com.mac.thermostat.resources.Poster;
 import com.mac.thermostat.resources.Resource;
 import com.mac.thermostat.resources.annotations.RequestType;
 import com.mac.thermostat.resources.annotations.enums.RestType;
-import com.mac.thermostat.resources.impl.Thermostat;
-import java.util.Objects;
-import org.springframework.web.client.RestTemplate;
+import com.mac.thermostat.resources.impl.utilities.SimpleRequester;
 
 /**
  *
  * @author Mac
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FanCirculationTime implements Resource, Getter<FanCirculationTime>,
-        Poster<FanCirculationTime, FanCirculationTime> {
+public class FanCirculationTime extends SimpleRequester<FanCirculationTime> implements Resource {
 
+    @JsonIgnore
+    private static final String RESOURCE = "fan_ctime";
     @JsonIgnore
     private static final int MIN_CTIME = 1;
     @JsonIgnore
@@ -35,8 +32,12 @@ public class FanCirculationTime implements Resource, Getter<FanCirculationTime>,
      * Data Format: Integer value: 1 to 9 minutes
      */
     @RequestType(types = {RestType.GET, RestType.POST})
-    @JsonProperty("fan_ctime")
+    @JsonProperty(RESOURCE)
     private int fanCTime;
+
+    public FanCirculationTime(Class<FanCirculationTime> tType, String resource) throws Exception {
+        super(FanCirculationTime.class, RESOURCE);
+    }
 
     public int getFanCTime() {
         return fanCTime;
@@ -45,27 +46,6 @@ public class FanCirculationTime implements Resource, Getter<FanCirculationTime>,
     public void setFanCTime(int fanCTime) {
         this.fanCTime = fanCTime < MIN_CTIME ? MIN_CTIME
                 : fanCTime > MAX_CTIME ? MAX_CTIME : fanCTime;
-    }
-
-    @Override
-    public String getResourcePath() throws Exception {
-        return Thermostat.URI.clone().path("fan_ctime").build().getUriWithHttp();
-    }
-
-    @Override
-    public FanCirculationTime get() throws Exception {
-        RestTemplate template = new RestTemplate();
-        return template.getForObject(getResourcePath(), FanCirculationTime.class);
-    }
-
-    @Override
-    public FanCirculationTime post(FanCirculationTime resource) throws Exception {
-        RestTemplate template = new RestTemplate();
-        if (Objects.isNull(resource)) {
-            return template.postForObject(getResourcePath(), this, FanCirculationTime.class);
-        } else {
-            return template.postForObject(getResourcePath(), resource, resource.getClass());
-        }
     }
 
 }
