@@ -5,14 +5,22 @@
  */
 package com.mac.thermostat.resources.impl.subresource.modes.concretes;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mac.thermostat.resources.annotations.FeatureAvailability;
+import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
 import com.mac.thermostat.resources.impl.subresource.modes.abstracts.Mode;
 
 /**
  *
  * @author MacDerson
  */
+@FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,
+    ThermostatModel.CT80A, ThermostatModel.CT80B})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class HeatProgram extends Mode{
 
+    @JsonIgnore
     private static final String resourcePath = "heat";
     
     public HeatProgram() throws Exception {

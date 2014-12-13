@@ -5,13 +5,19 @@
  */
 package com.mac.thermostat.resources.impl.subresource.modes.abstracts;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mac.thermostat.resources.Resource;
+import com.mac.thermostat.resources.annotations.FeatureAvailability;
+import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
 import com.mac.thermostat.resources.impl.attributes.WeekProgram;
 
 /**
  *
  * @author MacDerson
  */
+@FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,
+    ThermostatModel.CT80A, ThermostatModel.CT80B})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class Mode implements Resource{
 
     private final String path;

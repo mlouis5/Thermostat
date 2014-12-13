@@ -5,10 +5,10 @@
  */
 package com.mac.thermostat.resources.impl.subresource.concretes;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mac.thermostat.resources.Poster;
-import com.mac.thermostat.resources.Resource;
 import com.mac.thermostat.resources.annotations.AttributeInterpreter;
 import com.mac.thermostat.resources.annotations.FeatureAvailability;
 import com.mac.thermostat.resources.annotations.RequestType;
@@ -29,6 +29,10 @@ import org.springframework.web.client.RestTemplate;
 public class PriceMessageArea extends MessageArea
         implements Poster<PriceMessageArea, PriceMessageArea> {
 
+    @JsonIgnore
+    private static final int DISABLE = 0;
+    @JsonIgnore
+    private static final int ENABLE = 2;
     /**
      * Description: Enable/Disable control for uma and pma Request Type: POST
      * Data Format: Integer Value: 0 = Disable 2 = Enable
@@ -41,6 +45,8 @@ public class PriceMessageArea extends MessageArea
 
     public PriceMessageArea() throws Exception {
         super("pma");
+        this.mode = 0;
+        this.message = "0";
     }
 
     @Override
@@ -64,14 +70,16 @@ public class PriceMessageArea extends MessageArea
     }
 
     public void setMode(int mode) {
-        if (mode == 0 || mode == 2) {
-            this.mode = mode;
-        }
+        this.mode = mode == ENABLE ? ENABLE : DISABLE;
     }
 
     @Override
     public PriceMessageArea post(PriceMessageArea resource) throws Exception {
         RestTemplate template = new RestTemplate();
+        if(this.mode == DISABLE){
+            this.message = "0";
+            this.line = 0;
+        }
         if (Objects.isNull(resource)) {
             return template.postForObject(getResourcePath(), this, PriceMessageArea.class);
         } else {

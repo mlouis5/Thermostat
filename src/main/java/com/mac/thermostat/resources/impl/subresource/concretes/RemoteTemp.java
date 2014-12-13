@@ -18,7 +18,6 @@ import com.mac.thermostat.resources.annotations.enums.ReadableValue;
 import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
 import com.mac.thermostat.resources.impl.Thermostat;
-import com.mac.thermostat.resources.impl.utilities.ResourceURI;
 import java.util.Objects;
 import org.springframework.web.client.RestTemplate;
 
@@ -30,10 +29,11 @@ import org.springframework.web.client.RestTemplate;
     ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RemoteTemp implements Resource, Getter<RemoteTemp>, Poster<RemoteTemp, RemoteTemp>{
-    
+        
     @JsonIgnore
-    private final ResourceURI URI;
-    
+    private static final int ENABLED = 1;
+    @JsonIgnore
+    private static final int DISABLED = 0;
     /**
      * Description: Remote Temperature Mode
      * Request Type: POST
@@ -67,18 +67,14 @@ public class RemoteTemp implements Resource, Getter<RemoteTemp>, Poster<RemoteTe
     
     @JsonIgnore
     private int tempRemMem;
-    
-    public RemoteTemp() throws Exception{
-        URI = Thermostat.URI.clone().path("remote_temp").build();
-    }
 
     public int getRemMode() {
         return remMode;
     }
 
     public void setRemMode(int remMode) {
-        this.remMode = remMode;
-        if(this.remMode == 0){
+        this.remMode = remMode == ENABLED ? ENABLED : DISABLED;
+        if(this.remMode == DISABLED){
             this.remTemp = null;
         }
     }
@@ -93,13 +89,13 @@ public class RemoteTemp implements Resource, Getter<RemoteTemp>, Poster<RemoteTe
     public void setRemTemp(Integer remTemp) {
         this.remTemp = remTemp;
         if(this.remTemp > 0){
-            this.remMode = 1;
+            this.remMode = ENABLED;
         }
     }
 
     @Override
     public String getResourcePath() throws Exception {
-        return URI.getUriWithHttp();
+        return Thermostat.URI.clone().path("remote_temp").build().getUriWithHttp();
     }
 
     @Override

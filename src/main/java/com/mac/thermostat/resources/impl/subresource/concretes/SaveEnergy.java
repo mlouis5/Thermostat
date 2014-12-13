@@ -6,14 +6,17 @@
 package com.mac.thermostat.resources.impl.subresource.concretes;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mac.thermostat.resources.Getter;
 import com.mac.thermostat.resources.Poster;
 import com.mac.thermostat.resources.Resource;
 import com.mac.thermostat.resources.annotations.AttributeInterpreter;
+import com.mac.thermostat.resources.annotations.FeatureAvailability;
 import com.mac.thermostat.resources.annotations.RequestType;
 import com.mac.thermostat.resources.annotations.enums.ReadableValue;
 import com.mac.thermostat.resources.annotations.enums.RestType;
+import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
 import com.mac.thermostat.resources.impl.Thermostat;
 import java.util.Objects;
 import org.springframework.web.client.RestTemplate;
@@ -28,6 +31,9 @@ import org.springframework.web.client.RestTemplate;
  *
  * @author Mac
  */
+@FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,
+    ThermostatModel.CT80A, ThermostatModel.CT80B})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SaveEnergy implements Resource, Getter<SaveEnergy>,
         Poster<SaveEnergy, SaveEnergy> {
 
@@ -35,7 +41,14 @@ public class SaveEnergy implements Resource, Getter<SaveEnergy>,
     private static final float MIN_DELTA = .5f;
     @JsonIgnore
     private static final float MAX_DELTA = 9f;
-
+    @JsonIgnore
+    private static final int DISABLE = 0;
+    @JsonIgnore
+    private static final int ENABLE = 1;
+    @JsonIgnore
+    private static final int MIN_TYPE = 1;
+    @JsonIgnore
+    private static final int MAX_TYPE = 3;
     /**
      * Description: Thermostat save energy mode Request Type: GET, POST Data
      * Format: Integer value: 0 = disable 1 = enable
@@ -70,7 +83,7 @@ public class SaveEnergy implements Resource, Getter<SaveEnergy>,
     }
 
     public void setMode(int mode) {
-        this.mode = mode;
+        this.mode = mode == ENABLE ? ENABLE : DISABLE;
     }
 
     public int getType() {
@@ -78,7 +91,7 @@ public class SaveEnergy implements Resource, Getter<SaveEnergy>,
     }
 
     public void setType(int type) {
-        this.type = type;
+        this.type = type < MIN_TYPE ? MIN_TYPE : type > MAX_TYPE ? MAX_TYPE : type;
     }
 
     public Float getDelta() {
@@ -86,14 +99,10 @@ public class SaveEnergy implements Resource, Getter<SaveEnergy>,
     }
 
     public void setDelta(float delta) {
-        if(delta < MIN_DELTA){
-            delta = MIN_DELTA;
-        }if(delta > MAX_DELTA){
-            delta = MAX_DELTA;
-        }
-        this.delta = delta;
+        this.delta = delta < MIN_DELTA ? MIN_DELTA
+                : delta > MAX_DELTA ? MAX_DELTA : delta;
     }
-    
+
     @Override
     public String getResourcePath() throws Exception {
         return Thermostat.URI.clone().path("save_energy").build().getUriWithHttp();

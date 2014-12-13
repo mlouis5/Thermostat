@@ -6,12 +6,15 @@
 package com.mac.thermostat.resources.impl.subresource.modes.abstracts;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mac.thermostat.resources.Getter;
 import com.mac.thermostat.resources.Poster;
 import com.mac.thermostat.resources.Resource;
+import com.mac.thermostat.resources.annotations.FeatureAvailability;
 import com.mac.thermostat.resources.annotations.RequestType;
 import com.mac.thermostat.resources.annotations.enums.RestType;
+import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
 import com.mac.thermostat.resources.impl.Thermostat;
 import java.util.Objects;
 import org.springframework.web.client.RestTemplate;
@@ -20,11 +23,19 @@ import org.springframework.web.client.RestTemplate;
  *
  * @author Mac
  */
+@FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,
+    ThermostatModel.CT80A, ThermostatModel.CT80B})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class TempDifferential implements Resource, 
         Getter<TempDifferential>, Poster<TempDifferential, TempDifferential> {
 
     @JsonIgnore
+    private static final float MIN_DIFF = 2f;
+    @JsonIgnore
+    private static final float MAX_DIFF = 6f;
+    @JsonIgnore
     private final String path;
+    
     
     /**
      * Description: Thermostat temperature differential
@@ -36,9 +47,9 @@ public abstract class TempDifferential implements Resource,
     @JsonProperty("temp_diff")
     private float tempDiff;
     
-    public TempDifferential(String resource){
-        this.path = resource;
-        tempDiff = 2f;
+    public TempDifferential(String resource) throws Exception{
+        this.path = Thermostat.URI.clone().path(resource).build().getUriWithHttp();
+        tempDiff = MIN_DIFF;
     }
 
     public float getTempDiff() {
@@ -46,16 +57,16 @@ public abstract class TempDifferential implements Resource,
     }
 
     public void incrementTempDiff() {
-        this.tempDiff = tempDiff < 6f ? tempDiff++ : tempDiff;
+        this.tempDiff = tempDiff < MAX_DIFF ? tempDiff++ : tempDiff;
     }
     
     public void decrementTempDiff() {
-        this.tempDiff = tempDiff > 2f ? tempDiff-- : tempDiff;
+        this.tempDiff = tempDiff > MIN_DIFF ? tempDiff-- : tempDiff;
     }
        
     @Override
     public String getResourcePath() throws Exception {
-        return Thermostat.URI.clone().path(path).build().getUriWithHttp();
+        return this.path;
     }
     
     @Override

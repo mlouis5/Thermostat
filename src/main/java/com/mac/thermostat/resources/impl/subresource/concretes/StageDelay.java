@@ -5,14 +5,14 @@
  */
 package com.mac.thermostat.resources.impl.subresource.concretes;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mac.thermostat.resources.Getter;
 import com.mac.thermostat.resources.Poster;
 import com.mac.thermostat.resources.Resource;
-import com.mac.thermostat.resources.annotations.AttributeInterpreter;
 import com.mac.thermostat.resources.annotations.FeatureAvailability;
 import com.mac.thermostat.resources.annotations.RequestType;
-import com.mac.thermostat.resources.annotations.enums.ReadableValue;
 import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
 import com.mac.thermostat.resources.impl.Thermostat;
@@ -26,37 +26,46 @@ import org.springframework.web.client.RestTemplate;
 @FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,
     ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class LED implements Resource, Poster<LED, LED> {
+public class StageDelay implements Resource, Getter<StageDelay>, Poster<StageDelay, StageDelay> {
 
+    @JsonIgnore
+    private static final int MIN_DELAY = 0;
+    @JsonIgnore
+    private static final int MAX_DELAY = 60;
     /**
-     * Description: Energy LED Status Code Request Type: GET Data Format:
-     * Integer that represents: 0 – Off 1 – Green 2 – Yellow 4 – Red
+     * Description: Thermostat stage to stage delay<br>
+     * Request Type: GET, POST<br>
+     * Data Format: Integer value: 0 to 60 minutes
      */
-    @AttributeInterpreter(key = {0, 1, 2, 4},
-            values = {ReadableValue.OFF, ReadableValue.GREEN,
-                ReadableValue.YELLOW, ReadableValue.RED})
-    @RequestType(types = {RestType.POST})
-    @JsonProperty("energy_led")
-    private int energyLed;
+    @RequestType(types = {RestType.GET, RestType.POST})
+    @JsonProperty("stage_delay")
+    private int stageDelay;
 
-    public int getEnergyLed() {
-        return energyLed;
+    public int getStageDelay() {
+        return stageDelay;
     }
 
-    public void setEnergyLed(int energyLed) {
-        this.energyLed = energyLed;
+    public void setStageDelay(int stageDelay) {
+        this.stageDelay = stageDelay < MIN_DELAY ? MIN_DELAY
+                : stageDelay > MAX_DELAY ? MAX_DELAY : stageDelay;
     }
 
     @Override
     public String getResourcePath() throws Exception {
-        return Thermostat.URI.clone().path("led").build().getUriWithHttp();
+        return Thermostat.URI.clone().path("stage_delay").build().getUriWithHttp();
     }
 
     @Override
-    public LED post(LED resource) throws Exception {
+    public StageDelay get() throws Exception {
+        RestTemplate template = new RestTemplate();
+        return template.getForObject(getResourcePath(), StageDelay.class);
+    }
+
+    @Override
+    public StageDelay post(StageDelay resource) throws Exception {
         RestTemplate template = new RestTemplate();
         if (Objects.isNull(resource)) {
-            return template.postForObject(getResourcePath(), this, LED.class);
+            return template.postForObject(getResourcePath(), this, StageDelay.class);
         } else {
             return template.postForObject(getResourcePath(), resource, resource.getClass());
         }

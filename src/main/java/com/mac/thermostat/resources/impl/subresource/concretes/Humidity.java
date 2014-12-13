@@ -22,25 +22,30 @@ import org.springframework.web.client.RestTemplate;
 @FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,
     ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Model implements Resource, Getter<Model>{
-        
-    @JsonProperty("model")
+public class Humidity implements Resource, Getter<Humidity> {
+    
+    /**
+     * Description: Current humidity value<br>
+     * Request Type: GET<br>
+     * Data Format: Float value: Value is % relative humidity from 0 to 100%
+     */
     @RequestType
-    public String model;
-    
-    public String getModel(){
-        return model;
-    }
-    
-    @Override
-    public Model get() throws Exception{
-        RestTemplate template = new RestTemplate();
-        return template.getForObject(getResourcePath(), Model.class);
+    @JsonProperty("humidity")
+    private float humidity;
+
+    public float getHumidity() {
+        return humidity;
     }
 
     @Override
     public String getResourcePath() throws Exception {
-        return Thermostat.URI.clone().path("model").build().getUriWithHttp();
+        return Thermostat.URI.clone().path("humidity").build().getUriWithHttp();
+    }
+
+    @Override
+    public Humidity get() throws Exception {
+        RestTemplate template = new RestTemplate();
+        return template.getForObject(getResourcePath(), Humidity.class);
     }
     
 }

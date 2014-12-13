@@ -5,7 +5,6 @@
  */
 package com.mac.thermostat.resources.impl.subresource.concretes;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mac.thermostat.resources.Getter;
@@ -18,7 +17,6 @@ import com.mac.thermostat.resources.annotations.enums.ReadableValue;
 import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
 import com.mac.thermostat.resources.impl.Thermostat;
-import com.mac.thermostat.resources.impl.utilities.ResourceURI;
 import java.util.Objects;
 import org.springframework.web.client.RestTemplate;
 
@@ -30,9 +28,6 @@ import org.springframework.web.client.RestTemplate;
     ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Lock implements Resource, Getter<Lock>, Poster<Lock, Lock>{
-
-    @JsonIgnore
-    private final ResourceURI URI;
     
     /**
      * Description: Thermostat Lock Mode
@@ -50,13 +45,9 @@ public class Lock implements Resource, Getter<Lock>, Poster<Lock, Lock>{
             ReadableValue.FULL_LOCK, ReadableValue.UTILITY_LOCK})
     private int lockMode;
     
-    public Lock() throws Exception{
-        URI = Thermostat.URI.clone().path("lock").build();
-    }
-    
     @Override
     public String getResourcePath() throws Exception {
-        return URI.getUriWithHttp();
+        return Thermostat.URI.clone().path("lock").build().getUriWithHttp();
     }
 
     @Override

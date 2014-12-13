@@ -5,7 +5,10 @@
  */
 package com.mac.thermostat.resources.impl.subresource.modes.concretes;
 
-import com.mac.thermostat.resources.impl.attributes.DayProgram;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mac.thermostat.resources.annotations.FeatureAvailability;
+import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
 import com.mac.thermostat.resources.impl.attributes.DayProgram.DayType;
 import com.mac.thermostat.resources.impl.subresource.modes.abstracts.Day;
 
@@ -13,7 +16,11 @@ import com.mac.thermostat.resources.impl.subresource.modes.abstracts.Day;
  *
  * @author MacDerson
  */
+@FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,
+    ThermostatModel.CT80A, ThermostatModel.CT80B})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Saturday extends Day{
+    @JsonIgnore
     private static final DayType resourcePath = DayType.THURSDAY;
     
     public Saturday() throws Exception {

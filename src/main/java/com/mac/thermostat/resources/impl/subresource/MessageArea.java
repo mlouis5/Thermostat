@@ -12,7 +12,6 @@ import com.mac.thermostat.resources.Resource;
 import com.mac.thermostat.resources.annotations.RequestType;
 import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.impl.Thermostat;
-import com.mac.thermostat.resources.impl.utilities.ResourceURI;
 
 /**
  * Note: The PMA/UMA state is volatile. Their state may change when the WiFi<br> 
@@ -27,7 +26,7 @@ import com.mac.thermostat.resources.impl.utilities.ResourceURI;
 public abstract class MessageArea implements Resource{
 
     @JsonIgnore
-    private final ResourceURI URI;
+    private final String path;
     
     /**
      * Description: The line no. of the messaging area
@@ -50,7 +49,7 @@ public abstract class MessageArea implements Resource{
     protected String message;
     
     public MessageArea(String resource) throws Exception{
-        URI = Thermostat.URI.clone().path(resource).build();
+        path = Thermostat.URI.clone().path(resource).build().getUriWithHttp();
     }
     
     public abstract void setLine(int line);
@@ -67,7 +66,7 @@ public abstract class MessageArea implements Resource{
     
     @Override
     public String getResourcePath() throws Exception {
-        return URI.getUriWithHttp();
+        return path;
     }
     
 }

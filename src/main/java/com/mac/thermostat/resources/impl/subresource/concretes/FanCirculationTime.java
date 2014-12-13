@@ -11,10 +11,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mac.thermostat.resources.Getter;
 import com.mac.thermostat.resources.Poster;
 import com.mac.thermostat.resources.Resource;
-import com.mac.thermostat.resources.annotations.FeatureAvailability;
 import com.mac.thermostat.resources.annotations.RequestType;
 import com.mac.thermostat.resources.annotations.enums.RestType;
-import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
 import com.mac.thermostat.resources.impl.Thermostat;
 import java.util.Objects;
 import org.springframework.web.client.RestTemplate;
@@ -23,50 +21,48 @@ import org.springframework.web.client.RestTemplate;
  *
  * @author Mac
  */
-@FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,
-    ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TempSwing implements Resource, Getter<TempSwing>, Poster<TempSwing, TempSwing> {
+public class FanCirculationTime implements Resource, Getter<FanCirculationTime>,
+        Poster<FanCirculationTime, FanCirculationTime> {
 
     @JsonIgnore
-    private static final float MIN_SWING = .5f;
+    private static final int MIN_CTIME = 1;
     @JsonIgnore
-    private static final float MAX_SWING = 3f;
+    private static final int MAX_CTIME = 9;
     /**
-     * Description: Thermostat temperature swing<br>
+     * Description: Thermostat fan circulation time<br>
      * Request Type: GET, POST<br>
-     * Data Format: Float value 0.5 degree increments with a valid<br>
-     * temperature range from 0.5 to 3.0 degrees F.
+     * Data Format: Integer value: 1 to 9 minutes
      */
     @RequestType(types = {RestType.GET, RestType.POST})
-    @JsonProperty("tswing")
-    private float tSwing;
+    @JsonProperty("fan_ctime")
+    private int fanCTime;
 
-    public float gettSwing() {
-        return tSwing;
+    public int getFanCTime() {
+        return fanCTime;
     }
 
-    public void settSwing(float tSwing) {
-        this.tSwing = tSwing < MIN_SWING ? MIN_SWING
-                : tSwing > MAX_SWING ? MAX_SWING : tSwing;
+    public void setFanCTime(int fanCTime) {
+        this.fanCTime = fanCTime < MIN_CTIME ? MIN_CTIME
+                : fanCTime > MAX_CTIME ? MAX_CTIME : fanCTime;
     }
 
     @Override
     public String getResourcePath() throws Exception {
-        return Thermostat.URI.clone().path("tswing").build().getUriWithHttp();
+        return Thermostat.URI.clone().path("fan_ctime").build().getUriWithHttp();
     }
 
     @Override
-    public TempSwing get() throws Exception {
+    public FanCirculationTime get() throws Exception {
         RestTemplate template = new RestTemplate();
-        return template.getForObject(getResourcePath(), TempSwing.class);
+        return template.getForObject(getResourcePath(), FanCirculationTime.class);
     }
 
     @Override
-    public TempSwing post(TempSwing resource) throws Exception {
+    public FanCirculationTime post(FanCirculationTime resource) throws Exception {
         RestTemplate template = new RestTemplate();
         if (Objects.isNull(resource)) {
-            return template.postForObject(getResourcePath(), this, TempSwing.class);
+            return template.postForObject(getResourcePath(), this, FanCirculationTime.class);
         } else {
             return template.postForObject(getResourcePath(), resource, resource.getClass());
         }

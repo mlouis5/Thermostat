@@ -19,7 +19,9 @@ public enum ReadableValue {
     ENABLED("Enabled"), ADJUST_TARGET_BY_DELTA("Adjust target by delta"),
     LEAST_CONSUMING_POINT_IN_PROGRAM("Least consuming point"),
     SAVE_ENERGY_ABSOLUTE_SETPOINT("Save energy absolute setpoint"),
-    _25("25%"), _50("50%"), _75("75%"), _100("100%");
+    _25("25%"), _50("50%"), _75("75%"), _100("100%"),
+    RUN_ONLY_WITH_HEAT("Run only with heat"), 
+    HUMIDITY_ANYTIME("Humidity anytime (runs fan)");
     
     private final String value;
     
