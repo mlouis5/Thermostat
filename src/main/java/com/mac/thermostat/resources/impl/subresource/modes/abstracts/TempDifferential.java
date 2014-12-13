@@ -16,7 +16,6 @@ import com.mac.thermostat.resources.annotations.RequestType;
 import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
 import com.mac.thermostat.resources.impl.Thermostat;
-import java.util.Objects;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -26,8 +25,8 @@ import org.springframework.web.client.RestTemplate;
 @FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,
     ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
-public abstract class TempDifferential implements Resource, 
-        Getter<TempDifferential>, Poster<TempDifferential, TempDifferential> {
+public abstract class TempDifferential implements Resource,
+        Getter<TempDifferential>, Poster<TempDifferential> {
 
     @JsonIgnore
     private static final float MIN_DIFF = 2f;
@@ -35,19 +34,17 @@ public abstract class TempDifferential implements Resource,
     private static final float MAX_DIFF = 6f;
     @JsonIgnore
     private final String path;
-    
-    
+
     /**
-     * Description: Thermostat temperature differential
-     * Request Type: GET, POST 
-     * Data Format: Float value 1.0 degree increments with a valid
-     * temperature range from 2.0 to 6.0 degrees F.
+     * Description: Thermostat temperature differential Request Type: GET, POST
+     * Data Format: Float value 1.0 degree increments with a valid temperature
+     * range from 2.0 to 6.0 degrees F.
      */
     @RequestType(types = {RestType.GET, RestType.POST})
     @JsonProperty("temp_diff")
     private float tempDiff;
-    
-    public TempDifferential(String resource) throws Exception{
+
+    public TempDifferential(String resource) throws Exception {
         this.path = Thermostat.URI.clone().path(resource).build().getUriWithHttp();
         tempDiff = MIN_DIFF;
     }
@@ -59,16 +56,16 @@ public abstract class TempDifferential implements Resource,
     public void incrementTempDiff() {
         this.tempDiff = tempDiff < MAX_DIFF ? tempDiff++ : tempDiff;
     }
-    
+
     public void decrementTempDiff() {
         this.tempDiff = tempDiff > MIN_DIFF ? tempDiff-- : tempDiff;
     }
-       
+
     @Override
     public String getResourcePath() throws Exception {
         return this.path;
     }
-    
+
     @Override
     public TempDifferential get() throws Exception {
         RestTemplate template = new RestTemplate();
@@ -76,12 +73,8 @@ public abstract class TempDifferential implements Resource,
     }
 
     @Override
-    public TempDifferential post(TempDifferential resource) throws Exception {
+    public TempDifferential post() throws Exception {
         RestTemplate template = new RestTemplate();
-        if (Objects.isNull(resource)) {
-            return template.postForObject(getResourcePath(), this, this.getClass());
-        } else {
-            return template.postForObject(getResourcePath(), resource, resource.getClass());
-        }
+        return template.postForObject(getResourcePath(), this, this.getClass());
     }
 }

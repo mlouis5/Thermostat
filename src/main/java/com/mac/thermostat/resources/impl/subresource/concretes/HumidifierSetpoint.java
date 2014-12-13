@@ -53,4 +53,12 @@ public class HumidifierSetpoint extends SimpleRequester<HumidifierSetpoint>{
         this.tHumidity = tHumidity < MIN_T_HUMIDITY ? MIN_T_HUMIDITY
                 : tHumidity > MAX_T_HUMIDITY ? MAX_T_HUMIDITY : tHumidity;
     }
+
+    @Override
+    protected void doBeforeGet() {
+    }
+
+    @Override
+    protected void doBeforePost() {
+    }
 }

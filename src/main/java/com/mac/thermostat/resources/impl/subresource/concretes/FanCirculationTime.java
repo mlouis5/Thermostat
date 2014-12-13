@@ -48,4 +48,11 @@ public class FanCirculationTime extends SimpleRequester<FanCirculationTime> impl
                 : fanCTime > MAX_CTIME ? MAX_CTIME : fanCTime;
     }
 
+    @Override
+    protected void doBeforeGet() {
+    }
+
+    @Override
+    protected void doBeforePost() {
+    }
 }

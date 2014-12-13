@@ -56,4 +56,12 @@ public class Humidifier extends SimpleRequester<Humidifier>{
                 ? MIN_HUMIDIFIER_MODE : humidifierMode > MAX_HUMIDIFIER_MODE
                         ? MAX_HUMIDIFIER_MODE : humidifierMode;
     }
+
+    @Override
+    protected void doBeforeGet() {
+    }
+
+    @Override
+    protected void doBeforePost() {
+    }
 }

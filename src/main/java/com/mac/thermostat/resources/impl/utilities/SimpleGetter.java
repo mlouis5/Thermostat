@@ -15,7 +15,7 @@ import org.springframework.web.client.RestTemplate;
  * @author Mac
  * @param <T>
  */
-public class SimpleGetter <T> implements Resource, Getter<T>{
+public abstract class SimpleGetter <T> implements Resource, Getter<T>{
 
     private final String path;
     private final Class<T> tType;
@@ -32,7 +32,10 @@ public class SimpleGetter <T> implements Resource, Getter<T>{
         
     @Override
     public T get() throws Exception {
+        doBeforeGet();
         RestTemplate template = new RestTemplate();
         return template.getForObject(getResourcePath(), tType);
     }
+    
+    protected abstract void doBeforeGet();
 }

@@ -21,7 +21,8 @@ public enum ReadableValue {
     SAVE_ENERGY_ABSOLUTE_SETPOINT("Save energy absolute setpoint"),
     _25("25%"), _50("50%"), _75("75%"), _100("100%"),
     RUN_ONLY_WITH_HEAT("Run only with heat"), 
-    HUMIDITY_ANYTIME("Humidity anytime (runs fan)");
+    HUMIDITY_ANYTIME("Humidity anytime (runs fan)"),
+    ON_WITH_FAN("On with fan"), ON_WITHOUT_FAN("On without fan");
     
     private final String value;
     

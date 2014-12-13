@@ -55,4 +55,12 @@ public class Lock extends SimpleRequester<Lock> {
         this.lockMode = lockMode < MIN_LOCK_MODE ? MIN_LOCK_MODE
                 : lockMode > MAX_LOCK_MODE ? MAX_LOCK_MODE : lockMode;
     }
+
+    @Override
+    protected void doBeforeGet() {
+    }
+
+    @Override
+    protected void doBeforePost() {
+    }
 }

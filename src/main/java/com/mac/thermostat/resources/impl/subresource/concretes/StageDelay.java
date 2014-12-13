@@ -8,16 +8,11 @@ package com.mac.thermostat.resources.impl.subresource.concretes;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mac.thermostat.resources.Getter;
-import com.mac.thermostat.resources.Poster;
-import com.mac.thermostat.resources.Resource;
 import com.mac.thermostat.resources.annotations.FeatureAvailability;
 import com.mac.thermostat.resources.annotations.RequestType;
 import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
-import com.mac.thermostat.resources.impl.Thermostat;
-import java.util.Objects;
-import org.springframework.web.client.RestTemplate;
+import com.mac.thermostat.resources.impl.utilities.SimpleRequester;
 
 /**
  *
@@ -26,8 +21,10 @@ import org.springframework.web.client.RestTemplate;
 @FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,
     ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class StageDelay implements Resource, Getter<StageDelay>, Poster<StageDelay, StageDelay> {
+public class StageDelay extends SimpleRequester<StageDelay> {
 
+    @JsonIgnore
+    private static final String RESOURCE = "stage_delay";
     @JsonIgnore
     private static final int MIN_DELAY = 0;
     @JsonIgnore
@@ -38,8 +35,12 @@ public class StageDelay implements Resource, Getter<StageDelay>, Poster<StageDel
      * Data Format: Integer value: 0 to 60 minutes
      */
     @RequestType(types = {RestType.GET, RestType.POST})
-    @JsonProperty("stage_delay")
+    @JsonProperty(RESOURCE)
     private int stageDelay;
+
+    public StageDelay() throws Exception {
+        super(StageDelay.class, RESOURCE);
+    }
 
     public int getStageDelay() {
         return stageDelay;
@@ -51,24 +52,8 @@ public class StageDelay implements Resource, Getter<StageDelay>, Poster<StageDel
     }
 
     @Override
-    public String getResourcePath() throws Exception {
-        return Thermostat.URI.clone().path("stage_delay").build().getUriWithHttp();
-    }
+    protected void doBeforeGet() {}
 
     @Override
-    public StageDelay get() throws Exception {
-        RestTemplate template = new RestTemplate();
-        return template.getForObject(getResourcePath(), StageDelay.class);
-    }
-
-    @Override
-    public StageDelay post(StageDelay resource) throws Exception {
-        RestTemplate template = new RestTemplate();
-        if (Objects.isNull(resource)) {
-            return template.postForObject(getResourcePath(), this, StageDelay.class);
-        } else {
-            return template.postForObject(getResourcePath(), resource, resource.getClass());
-        }
-    }
-
+    protected void doBeforePost() {}
 }

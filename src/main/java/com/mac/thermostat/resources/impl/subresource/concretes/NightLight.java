@@ -8,18 +8,13 @@ package com.mac.thermostat.resources.impl.subresource.concretes;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mac.thermostat.resources.Getter;
-import com.mac.thermostat.resources.Poster;
-import com.mac.thermostat.resources.Resource;
 import com.mac.thermostat.resources.annotations.AttributeInterpreter;
 import com.mac.thermostat.resources.annotations.FeatureAvailability;
 import com.mac.thermostat.resources.annotations.RequestType;
 import com.mac.thermostat.resources.annotations.enums.ReadableValue;
 import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
-import com.mac.thermostat.resources.impl.Thermostat;
-import java.util.Objects;
-import org.springframework.web.client.RestTemplate;
+import com.mac.thermostat.resources.impl.utilities.SimpleRequester;
 
 /**
  *
@@ -28,8 +23,10 @@ import org.springframework.web.client.RestTemplate;
 @FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,
     ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class NightLight implements Resource, Getter<NightLight>, Poster<NightLight, NightLight> {
+public class NightLight extends SimpleRequester<NightLight> {
 
+    @JsonIgnore
+    private static final String RESOURCE = "night_light";
     @JsonIgnore
     private static final int MIN_INTENSITY = 0;
     @JsonIgnore
@@ -45,6 +42,10 @@ public class NightLight implements Resource, Getter<NightLight>, Poster<NightLig
         ReadableValue._100})
     private int intensity;
 
+    public NightLight(Class<NightLight> tType, String resource) throws Exception {
+        super(NightLight.class, RESOURCE);
+    }
+
     public int getIntensity() {
         return intensity;
     }
@@ -55,24 +56,10 @@ public class NightLight implements Resource, Getter<NightLight>, Poster<NightLig
     }
 
     @Override
-    public String getResourcePath() throws Exception {
-        return Thermostat.URI.clone().path("night_light").build().getUriWithHttp();
+    protected void doBeforeGet() {
     }
 
     @Override
-    public NightLight get() throws Exception {
-        RestTemplate template = new RestTemplate();
-        return template.getForObject(getResourcePath(), NightLight.class);
+    protected void doBeforePost() {
     }
-
-    @Override
-    public NightLight post(NightLight resource) throws Exception {
-        RestTemplate template = new RestTemplate();
-        if (Objects.isNull(resource)) {
-            return template.postForObject(getResourcePath(), this, NightLight.class);
-        } else {
-            return template.postForObject(getResourcePath(), resource, resource.getClass());
-        }
-    }
-
 }

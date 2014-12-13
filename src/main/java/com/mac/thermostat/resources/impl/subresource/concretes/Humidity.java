@@ -39,5 +39,9 @@ public class Humidity extends SimpleGetter<Humidity> {
 
     public float getHumidity() {
         return humidity;
-    }    
+    }
+
+    @Override
+    protected void doBeforeGet() {
+    }
 }

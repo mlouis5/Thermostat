@@ -7,12 +7,9 @@ package com.mac.thermostat.resources.impl.subresource.concretes;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mac.thermostat.resources.Poster;
 import com.mac.thermostat.resources.annotations.FeatureAvailability;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
 import com.mac.thermostat.resources.impl.subresource.MessageArea;
-import java.util.Objects;
-import org.springframework.web.client.RestTemplate;
 
 /**
  *
@@ -21,15 +18,17 @@ import org.springframework.web.client.RestTemplate;
 @FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,
     ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserMessageArea extends MessageArea implements Poster<UserMessageArea, UserMessageArea> {
+public class UserMessageArea extends MessageArea<UserMessageArea> {
 
+    @JsonIgnore
+    private static final String RESOURCE = "uma";
     @JsonIgnore
     private static final int MIN_LINE = 0;
     @JsonIgnore
     private static final int MAX_LINE = 1;
 
     public UserMessageArea() throws Exception {
-        super("uma");
+        super(UserMessageArea.class, RESOURCE);
     }
 
     @Override
@@ -44,13 +43,6 @@ public class UserMessageArea extends MessageArea implements Poster<UserMessageAr
     }
 
     @Override
-    public UserMessageArea post(UserMessageArea resource) throws Exception {
-        RestTemplate template = new RestTemplate();
-        if (Objects.isNull(resource)) {
-            return template.postForObject(getResourcePath(), this, UserMessageArea.class);
-        } else {
-            return template.postForObject(getResourcePath(), resource, resource.getClass());
-        }
-    }
+    protected void doBeforePost() {}
 
 }

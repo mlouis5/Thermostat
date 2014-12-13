@@ -35,7 +35,7 @@ import org.springframework.web.client.RestTemplate;
     ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
 @RequestType(types = {RestType.GET, RestType.POST})
-public class Program implements Resource, Getter<Program>, Poster<Program, Program>{
+public class Program implements Resource, Getter<Program>, Poster<Program> {
 
     protected ResourceURI URI;
 
@@ -43,7 +43,8 @@ public class Program implements Resource, Getter<Program>, Poster<Program, Progr
     private Mode mode;
     private Day day;
 
-    public Program() throws Exception {}
+    public Program() throws Exception {
+    }
 
     public Program mode(Mode mode) throws Exception {
         if (Objects.nonNull(mode)) {
@@ -66,12 +67,12 @@ public class Program implements Resource, Getter<Program>, Poster<Program, Progr
     public Day getDay() {
         return day;
     }
-    
-    public Program build() throws Exception{
-        if(Objects.nonNull(mode)){
+
+    public Program build() throws Exception {
+        if (Objects.nonNull(mode)) {
             URI = Thermostat.URI.clone().path("program").path(this.mode.getResourcePath());
             requestor = new ModeRequestor(URI);
-            if(Objects.nonNull(day)){
+            if (Objects.nonNull(day)) {
                 URI = Thermostat.URI.clone().path("program")
                         .path(mode.getResourcePath())
                         .path(this.day.getResourcePath());
@@ -88,78 +89,77 @@ public class Program implements Resource, Getter<Program>, Poster<Program, Progr
 
     @Override
     public Program get() throws Exception {
-        if(Objects.isNull(requestor)){
+        if (Objects.isNull(requestor)) {
             return this;
         }
         return requestor.get();
     }
 
     @Override
-    public Program post(Program resource) throws Exception {
-        if(Objects.isNull(requestor)){
+    public Program post() throws Exception {
+        if (Objects.isNull(requestor)) {
             return this;
         }
-        return requestor.post(this);
+        return requestor.post();
     }
-    
+
     private static abstract class Requestor implements Getter<Program>,
-            Poster<Program, Program>{
+            Poster<Program> {
+
         protected final ResourceURI uri;
-        
-        public Requestor(ResourceURI uri){
+
+        public Requestor(ResourceURI uri) {
             this.uri = uri;
         }
     }
 
     private class ModeRequestor extends Requestor {
+
         private ModeRequestor(ResourceURI uri) {
             super(uri);
         }
 
         @Override
         public Program get() throws Exception {
-            RestTemplate template = new RestTemplate();            
+            RestTemplate template = new RestTemplate();
             DayProgram prog = template.getForObject(uri.getUriWithHttp(), DayProgram.class);
             Program.this.getDay().setDayProgram(prog);
             return Program.this;
         }
 
         @Override
-        public Program post(Program resource) throws Exception {
+        public Program post() throws Exception {
             RestTemplate template = new RestTemplate();
-            if (Objects.nonNull(resource)) {
-                WeekProgram week = resource.getMode().getWeek();
-                if (Objects.nonNull(week)) {
-                    resource.getMode().setWeek(template.postForObject(uri.getUriWithHttp(), week, week.getClass()));
-                }
+            WeekProgram week = Program.this.getMode().getWeek();
+            if (Objects.nonNull(week)) {
+                Program.this.getMode().setWeek(template.postForObject(uri.getUriWithHttp(), week, week.getClass()));
             }
-            return resource;
+            return Program.this;
         }
     }//end ModeRequester
-    
+
     private class DayRequestor extends Requestor {
+
         private DayRequestor(ResourceURI uri) {
             super(uri);
         }
 
         @Override
         public Program get() throws Exception {
-            RestTemplate template = new RestTemplate();            
+            RestTemplate template = new RestTemplate();
             DayProgram prog = template.getForObject(uri.getUriWithHttp(), DayProgram.class);
             Program.this.getDay().setDayProgram(prog);
             return Program.this;
         }
 
         @Override
-        public Program post(Program resource) throws Exception {
+        public Program post() throws Exception {
             RestTemplate template = new RestTemplate();
-            if (Objects.nonNull(resource)) {
-                DayProgram day = resource.getDay().getDayProgram();
-                if (Objects.nonNull(day)) {
-                    resource.getDay().setDayProgram(template.postForObject(uri.getUriWithHttp(), day, day.getClass()));
-                }
+            DayProgram day = Program.this.getDay().getDayProgram();
+            if (Objects.nonNull(day)) {
+                Program.this.getDay().setDayProgram(template.postForObject(uri.getUriWithHttp(), day, day.getClass()));
             }
-            return resource;
+            return Program.this;
         }
     }//end DayRequester
 }//end Program

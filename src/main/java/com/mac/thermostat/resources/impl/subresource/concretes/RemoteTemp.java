@@ -8,18 +8,14 @@ package com.mac.thermostat.resources.impl.subresource.concretes;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mac.thermostat.resources.Getter;
-import com.mac.thermostat.resources.Poster;
-import com.mac.thermostat.resources.Resource;
 import com.mac.thermostat.resources.annotations.AttributeInterpreter;
 import com.mac.thermostat.resources.annotations.FeatureAvailability;
 import com.mac.thermostat.resources.annotations.RequestType;
 import com.mac.thermostat.resources.annotations.enums.ReadableValue;
 import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
-import com.mac.thermostat.resources.impl.Thermostat;
+import com.mac.thermostat.resources.impl.utilities.SimpleRequester;
 import java.util.Objects;
-import org.springframework.web.client.RestTemplate;
 
 /**
  *
@@ -28,8 +24,10 @@ import org.springframework.web.client.RestTemplate;
 @FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,
     ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RemoteTemp implements Resource, Getter<RemoteTemp>, Poster<RemoteTemp, RemoteTemp>{
+public class RemoteTemp extends SimpleRequester<RemoteTemp>{
         
+    @JsonIgnore
+    private static final String RESOURCE = "remote_temp";
     @JsonIgnore
     private static final int ENABLED = 1;
     @JsonIgnore
@@ -68,6 +66,10 @@ public class RemoteTemp implements Resource, Getter<RemoteTemp>, Poster<RemoteTe
     @JsonIgnore
     private int tempRemMem;
 
+    public RemoteTemp() throws Exception {
+        super(RemoteTemp.class, RESOURCE);
+    }
+
     public int getRemMode() {
         return remMode;
     }
@@ -94,26 +96,11 @@ public class RemoteTemp implements Resource, Getter<RemoteTemp>, Poster<RemoteTe
     }
 
     @Override
-    public String getResourcePath() throws Exception {
-        return Thermostat.URI.clone().path("remote_temp").build().getUriWithHttp();
-    }
-
-    @Override
-    public RemoteTemp get() throws Exception {
+    protected void doBeforeGet() {
         tempRemMem = remTemp;
         remTemp = null;
-        RestTemplate template = new RestTemplate();
-        return template.getForObject(getResourcePath(), RemoteTemp.class);
     }
 
     @Override
-    public RemoteTemp post(RemoteTemp resource) throws Exception {
-        RestTemplate template = new RestTemplate();
-        if (Objects.isNull(resource)) {
-            return template.postForObject(getResourcePath(), this, RemoteTemp.class);
-        } else {
-            return template.postForObject(getResourcePath(), resource, resource.getClass());
-        }
-    }
-    
+    protected void doBeforePost() {}    
 }

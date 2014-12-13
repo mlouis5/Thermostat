@@ -8,16 +8,11 @@ package com.mac.thermostat.resources.impl.subresource.concretes;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mac.thermostat.resources.Getter;
-import com.mac.thermostat.resources.Poster;
-import com.mac.thermostat.resources.Resource;
 import com.mac.thermostat.resources.annotations.FeatureAvailability;
 import com.mac.thermostat.resources.annotations.RequestType;
 import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
-import com.mac.thermostat.resources.impl.Thermostat;
-import java.util.Objects;
-import org.springframework.web.client.RestTemplate;
+import com.mac.thermostat.resources.impl.utilities.SimpleRequester;
 
 /**
  *
@@ -26,8 +21,10 @@ import org.springframework.web.client.RestTemplate;
 @FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,
     ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TempSwing implements Resource, Getter<TempSwing>, Poster<TempSwing, TempSwing> {
+public class TempSwing extends SimpleRequester<TempSwing> {
 
+    @JsonIgnore
+    private static final String RESOURCE = "tswing";
     @JsonIgnore
     private static final float MIN_SWING = .5f;
     @JsonIgnore
@@ -39,8 +36,12 @@ public class TempSwing implements Resource, Getter<TempSwing>, Poster<TempSwing,
      * temperature range from 0.5 to 3.0 degrees F.
      */
     @RequestType(types = {RestType.GET, RestType.POST})
-    @JsonProperty("tswing")
+    @JsonProperty("RESOURCE")
     private float tSwing;
+
+    public TempSwing() throws Exception {
+        super(TempSwing.class, RESOURCE);
+    }
 
     public float gettSwing() {
         return tSwing;
@@ -52,24 +53,8 @@ public class TempSwing implements Resource, Getter<TempSwing>, Poster<TempSwing,
     }
 
     @Override
-    public String getResourcePath() throws Exception {
-        return Thermostat.URI.clone().path("tswing").build().getUriWithHttp();
-    }
+    protected void doBeforeGet() {}
 
     @Override
-    public TempSwing get() throws Exception {
-        RestTemplate template = new RestTemplate();
-        return template.getForObject(getResourcePath(), TempSwing.class);
-    }
-
-    @Override
-    public TempSwing post(TempSwing resource) throws Exception {
-        RestTemplate template = new RestTemplate();
-        if (Objects.isNull(resource)) {
-            return template.postForObject(getResourcePath(), this, TempSwing.class);
-        } else {
-            return template.postForObject(getResourcePath(), resource, resource.getClass());
-        }
-    }
-
+    protected void doBeforePost() {}
 }

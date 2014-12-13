@@ -16,29 +16,27 @@ import org.springframework.web.client.RestTemplate;
  * @author Mac
  * @param <T>
  */
-public class SimplePoster<T extends Resource> implements Resource, Poster<T, T>{
+public abstract class SimplePoster<T extends Resource> implements Resource, Poster<T> {
 
     private final String path;
     private final Class<T> tType;
-    
-    public SimplePoster(Class<T> tType, String resource) throws Exception{
+
+    public SimplePoster(Class<T> tType, String resource) throws Exception {
         this.path = resource;
         this.tType = tType;
     }
-    
+
     @Override
     public String getResourcePath() throws Exception {
         return Thermostat.URI.clone().path(path).build().getUriWithHttp();
     }
 
     @Override
-    public T post(T resource) throws Exception {
+    public T post() throws Exception {
+        doBeforePost();
         RestTemplate template = new RestTemplate();
-        if (Objects.isNull(resource)) {
-            return template.postForObject(getResourcePath(), this, tType);
-        } else {
-            return template.postForObject(getResourcePath(), resource, tType);
-        }
+        return template.postForObject(getResourcePath(), this, tType);
     }
-    
+
+    protected abstract void doBeforePost();
 }

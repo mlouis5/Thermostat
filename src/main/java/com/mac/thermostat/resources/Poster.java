@@ -9,7 +9,7 @@ package com.mac.thermostat.resources;
  *
  * @author MacDerson
  */
-public interface Poster<R extends Resource, S> {
+public interface Poster<S> {
     
-    S post(R resource) throws Exception;
+    S post() throws Exception;
 }

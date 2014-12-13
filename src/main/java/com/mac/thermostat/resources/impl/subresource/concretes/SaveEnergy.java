@@ -8,18 +8,14 @@ package com.mac.thermostat.resources.impl.subresource.concretes;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mac.thermostat.resources.Getter;
-import com.mac.thermostat.resources.Poster;
-import com.mac.thermostat.resources.Resource;
 import com.mac.thermostat.resources.annotations.AttributeInterpreter;
 import com.mac.thermostat.resources.annotations.FeatureAvailability;
 import com.mac.thermostat.resources.annotations.RequestType;
 import com.mac.thermostat.resources.annotations.enums.ReadableValue;
 import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
-import com.mac.thermostat.resources.impl.Thermostat;
+import com.mac.thermostat.resources.impl.utilities.SimpleRequester;
 import java.util.Objects;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * The SAVE ENERGY resource is a function that will apply a 4 degree offset to
@@ -34,9 +30,10 @@ import org.springframework.web.client.RestTemplate;
 @FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,
     ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SaveEnergy implements Resource, Getter<SaveEnergy>,
-        Poster<SaveEnergy, SaveEnergy> {
+public class SaveEnergy extends SimpleRequester<SaveEnergy> {
 
+    @JsonIgnore
+    private static final String RESOURCE = "save_energy";
     @JsonIgnore
     private static final float MIN_DELTA = .5f;
     @JsonIgnore
@@ -78,6 +75,10 @@ public class SaveEnergy implements Resource, Getter<SaveEnergy>,
     @JsonProperty("delta")
     private Float delta;
 
+    public SaveEnergy() throws Exception {
+        super(SaveEnergy.class, RESOURCE);
+    }
+
     public int getMode() {
         return mode;
     }
@@ -103,29 +104,6 @@ public class SaveEnergy implements Resource, Getter<SaveEnergy>,
                 : delta > MAX_DELTA ? MAX_DELTA : delta;
     }
 
-    @Override
-    public String getResourcePath() throws Exception {
-        return Thermostat.URI.clone().path("save_energy").build().getUriWithHttp();
-    }
-
-    @Override
-    public SaveEnergy get() throws Exception {
-        RestTemplate template = new RestTemplate();
-        return template.getForObject(getResourcePath(), SaveEnergy.class);
-    }
-
-    @Override
-    public SaveEnergy post(SaveEnergy resource) throws Exception {
-        RestTemplate template = new RestTemplate();
-        if (Objects.isNull(resource)) {
-            validateDelta();
-            return template.postForObject(getResourcePath(), this, SaveEnergy.class);
-        } else {
-            resource.validateDelta();
-            return template.postForObject(getResourcePath(), resource, resource.getClass());
-        }
-    }
-
     private void validateDelta() {
         if (Objects.nonNull(delta)) {
             if (mode != 1 || type != 1) {
@@ -136,5 +114,13 @@ public class SaveEnergy implements Resource, Getter<SaveEnergy>,
                 delta = 4f;
             }
         }
+    }
+
+    @Override
+    protected void doBeforeGet() {}
+
+    @Override
+    protected void doBeforePost() {
+        validateDelta();
     }
 }

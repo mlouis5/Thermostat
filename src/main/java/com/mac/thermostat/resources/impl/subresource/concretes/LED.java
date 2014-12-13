@@ -49,4 +49,8 @@ public class LED extends SimplePoster<LED> {
     public void setEnergyLed(int energyLed) {
         this.energyLed = energyLed;
     }
+
+    @Override
+    protected void doBeforePost() {
+    }
 }

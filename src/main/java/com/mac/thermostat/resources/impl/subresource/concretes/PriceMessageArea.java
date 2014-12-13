@@ -8,7 +8,6 @@ package com.mac.thermostat.resources.impl.subresource.concretes;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mac.thermostat.resources.Poster;
 import com.mac.thermostat.resources.annotations.AttributeInterpreter;
 import com.mac.thermostat.resources.annotations.FeatureAvailability;
 import com.mac.thermostat.resources.annotations.RequestType;
@@ -17,7 +16,6 @@ import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
 import com.mac.thermostat.resources.impl.subresource.MessageArea;
 import java.util.Objects;
-import org.springframework.web.client.RestTemplate;
 
 /**
  *
@@ -26,9 +24,10 @@ import org.springframework.web.client.RestTemplate;
 @FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,
     ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PriceMessageArea extends MessageArea
-        implements Poster<PriceMessageArea, PriceMessageArea> {
+public class PriceMessageArea extends MessageArea<PriceMessageArea> {
 
+    @JsonIgnore
+    private static final String RESOURCE = "pma";
     @JsonIgnore
     private static final int DISABLE = 0;
     @JsonIgnore
@@ -44,9 +43,9 @@ public class PriceMessageArea extends MessageArea
     private int mode;
 
     public PriceMessageArea() throws Exception {
-        super("pma");
+        super(PriceMessageArea.class, RESOURCE);
         this.mode = 0;
-        this.message = "0";
+        this.message = null;
     }
 
     @Override
@@ -74,17 +73,10 @@ public class PriceMessageArea extends MessageArea
     }
 
     @Override
-    public PriceMessageArea post(PriceMessageArea resource) throws Exception {
-        RestTemplate template = new RestTemplate();
+    protected void doBeforePost() {
         if(this.mode == DISABLE){
             this.message = "0";
             this.line = 0;
         }
-        if (Objects.isNull(resource)) {
-            return template.postForObject(getResourcePath(), this, PriceMessageArea.class);
-        } else {
-            return template.postForObject(getResourcePath(), resource, resource.getClass());
-        }
     }
-
 }

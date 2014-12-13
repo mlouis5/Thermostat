@@ -12,6 +12,7 @@ import com.mac.thermostat.resources.Resource;
 import com.mac.thermostat.resources.annotations.RequestType;
 import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.impl.Thermostat;
+import com.mac.thermostat.resources.impl.utilities.SimplePoster;
 
 /**
  * Note: The PMA/UMA state is volatile. Their state may change when the WiFi<br> 
@@ -21,12 +22,10 @@ import com.mac.thermostat.resources.impl.Thermostat;
  * on regardless of the value of mode.
  * 
  * @author Mac
+ * @param <T>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public abstract class MessageArea implements Resource{
-
-    @JsonIgnore
-    private final String path;
+public abstract class MessageArea<T extends Resource>  extends SimplePoster<T>{
     
     /**
      * Description: The line no. of the messaging area
@@ -48,8 +47,8 @@ public abstract class MessageArea implements Resource{
     @JsonProperty("message")
     protected String message;
     
-    public MessageArea(String resource) throws Exception{
-        path = Thermostat.URI.clone().path(resource).build().getUriWithHttp();
+    public MessageArea(Class<T> tType, String resource) throws Exception{
+        super(tType, resource);
     }
     
     public abstract void setLine(int line);
@@ -62,11 +61,5 @@ public abstract class MessageArea implements Resource{
     
     public String getMessage(){
         return message;
-    }
-    
-    @Override
-    public String getResourcePath() throws Exception {
-        return path;
-    }
-    
+    }   
 }
