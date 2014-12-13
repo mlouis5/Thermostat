@@ -98,7 +98,7 @@ public class RemoteTemp implements Resource, Getter<RemoteTemp>, Poster<RemoteTe
     }
 
     @Override
-    public String getUriString() throws Exception {
+    public String getResourcePath() throws Exception {
         return URI.getUriWithHttp();
     }
 
@@ -107,16 +107,16 @@ public class RemoteTemp implements Resource, Getter<RemoteTemp>, Poster<RemoteTe
         tempRemMem = remTemp;
         remTemp = null;
         RestTemplate template = new RestTemplate();
-        return template.getForObject(getUriString(), RemoteTemp.class);
+        return template.getForObject(getResourcePath(), RemoteTemp.class);
     }
 
     @Override
     public RemoteTemp post(RemoteTemp resource) throws Exception {
         RestTemplate template = new RestTemplate();
         if (Objects.isNull(resource)) {
-            return template.postForObject(getUriString(), this, RemoteTemp.class);
+            return template.postForObject(getResourcePath(), this, RemoteTemp.class);
         } else {
-            return template.postForObject(getUriString(), resource, resource.getClass());
+            return template.postForObject(getResourcePath(), resource, resource.getClass());
         }
     }
     

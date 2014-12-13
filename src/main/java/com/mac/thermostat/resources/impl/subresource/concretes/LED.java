@@ -17,7 +17,6 @@ import com.mac.thermostat.resources.annotations.enums.ReadableValue;
 import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
 import com.mac.thermostat.resources.impl.Thermostat;
-import com.mac.thermostat.resources.impl.json.Response;
 import com.mac.thermostat.resources.impl.utilities.ResourceURI;
 import java.util.Objects;
 import org.springframework.web.client.RestTemplate;
@@ -59,7 +58,7 @@ public class LED implements Resource, Poster<LED, LED> {
     }
 
     @Override
-    public String getUriString() throws Exception {
+    public String getResourcePath() throws Exception {
         return URI.getUriWithHttp();
     }
 
@@ -67,9 +66,9 @@ public class LED implements Resource, Poster<LED, LED> {
     public LED post(LED resource) throws Exception {
         RestTemplate template = new RestTemplate();
         if (Objects.isNull(resource)) {
-            return template.postForObject(getUriString(), this, LED.class);
+            return template.postForObject(getResourcePath(), this, LED.class);
         } else {
-            return template.postForObject(getUriString(), resource, resource.getClass());
+            return template.postForObject(getResourcePath(), resource, resource.getClass());
         }
     }
 

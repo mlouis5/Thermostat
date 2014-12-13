@@ -5,16 +5,18 @@
  */
 package com.mac.thermostat.resources.impl.subresource.modes.concretes;
 
-import com.mac.thermostat.resources.impl.subresource.modes.abstracts.TempDifferential;
+import com.mac.thermostat.resources.impl.subresource.modes.abstracts.Mode;
 
 /**
  *
- * @author Mac
+ * @author MacDerson
  */
-public class Heat extends TempDifferential {
+public class HeatProgram extends Mode{
 
-    public Heat() {
-        super("heat");
+    private static final String resourcePath = "heat";
+    
+    public HeatProgram() throws Exception {
+        super(resourcePath);
     }
     
 }

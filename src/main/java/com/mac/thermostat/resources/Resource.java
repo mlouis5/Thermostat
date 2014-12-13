@@ -13,6 +13,6 @@ import com.mac.thermostat.resources.impl.utilities.ResourceURI;
  */
 public interface Resource {
     
-    String getUriString() throws Exception;
+    String getResourcePath() throws Exception;
       
 }

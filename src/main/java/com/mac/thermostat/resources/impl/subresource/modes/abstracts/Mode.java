@@ -31,7 +31,7 @@ public abstract class Mode implements Resource{
     }
     
     @Override
-    public String getUriString() throws Exception {
+    public String getResourcePath() throws Exception {
         return path;
     }
     

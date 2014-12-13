@@ -21,7 +21,7 @@ public abstract class Day implements Resource {
     protected DayProgram dayProgram;
     
     protected Day(DayType resourcePath){
-        this.path = resourcePath.abbreviation();
+        this.path = resourcePath.abbreviation().toLowerCase();
     }
     
     public DayProgram getDayProgram(){
@@ -33,7 +33,7 @@ public abstract class Day implements Resource {
     }
     
     @Override
-    public String getUriString() throws Exception {
+    public String getResourcePath() throws Exception {
         return path;
     }
 }

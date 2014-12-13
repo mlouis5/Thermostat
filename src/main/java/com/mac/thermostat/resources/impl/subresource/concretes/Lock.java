@@ -55,23 +55,23 @@ public class Lock implements Resource, Getter<Lock>, Poster<Lock, Lock>{
     }
     
     @Override
-    public String getUriString() throws Exception {
+    public String getResourcePath() throws Exception {
         return URI.getUriWithHttp();
     }
 
     @Override
     public Lock get() throws Exception {
         RestTemplate template = new RestTemplate();
-        return template.getForObject(getUriString(), Lock.class);
+        return template.getForObject(getResourcePath(), Lock.class);
     }
 
     @Override
     public Lock post(Lock resource) throws Exception {
         RestTemplate template = new RestTemplate();
         if (Objects.isNull(resource)) {
-            return template.postForObject(getUriString(), this, Lock.class);
+            return template.postForObject(getResourcePath(), this, Lock.class);
         } else {
-            return template.postForObject(getUriString(), resource, resource.getClass());
+            return template.postForObject(getResourcePath(), resource, resource.getClass());
         }
     }
     

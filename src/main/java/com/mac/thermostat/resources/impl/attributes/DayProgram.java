@@ -26,8 +26,8 @@ public class DayProgram {
         THURSDAY(3, "THU"), FRIDAY(4, "FRI"), SATURDAY(5, "SAT"),
         SUNDAY(6, "SUN");
 
-        private int dayVal;
-        private String abbr;
+        private final int dayVal;
+        private final String abbr;
 
         DayType(int dayVal, String abbr) {
             this.dayVal = dayVal;
@@ -50,7 +50,7 @@ public class DayProgram {
     @JsonIgnore
     private DayType day;
 
-    private Map<Minute, Temperature> values;
+    private final Map<Minute, Temperature> values;
 
     public DayProgram() {
         values = new HashMap();

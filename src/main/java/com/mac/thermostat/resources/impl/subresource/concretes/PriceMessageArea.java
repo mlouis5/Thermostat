@@ -73,9 +73,9 @@ public class PriceMessageArea extends MessageArea
     public PriceMessageArea post(PriceMessageArea resource) throws Exception {
         RestTemplate template = new RestTemplate();
         if (Objects.isNull(resource)) {
-            return template.postForObject(getUriString(), this, PriceMessageArea.class);
+            return template.postForObject(getResourcePath(), this, PriceMessageArea.class);
         } else {
-            return template.postForObject(getUriString(), resource, resource.getClass());
+            return template.postForObject(getResourcePath(), resource, resource.getClass());
         }
     }
 

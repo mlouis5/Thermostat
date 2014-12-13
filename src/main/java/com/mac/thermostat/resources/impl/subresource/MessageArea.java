@@ -66,7 +66,7 @@ public abstract class MessageArea implements Resource{
     }
     
     @Override
-    public String getUriString() throws Exception {
+    public String getResourcePath() throws Exception {
         return URI.getUriWithHttp();
     }
     

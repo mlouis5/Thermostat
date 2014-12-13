@@ -15,7 +15,11 @@ public enum ReadableValue {
     LOCK_DISABLED("Lock Disabled"), PARTIAL_LOCK("Partial Lock"), 
     FULL_LOCK("Full Lock"), UTILITY_LOCK("Utility Lock"),
     OFF("Off"), GREEN("Green"), YELLOW("Yellow"), RED("Red"),
-    DISABLE("Disable"), DISABLED("Disabled"), ENABLE("Enable"), ENABLED("Enabled");
+    DISABLE("Disable"), DISABLED("Disabled"), ENABLE("Enable"), 
+    ENABLED("Enabled"), ADJUST_TARGET_BY_DELTA("Adjust target by delta"),
+    LEAST_CONSUMING_POINT_IN_PROGRAM("Least consuming point"),
+    SAVE_ENERGY_ABSOLUTE_SETPOINT("Save energy absolute setpoint"),
+    _25("25%"), _50("50%"), _75("75%"), _100("100%");
     
     private final String value;
     

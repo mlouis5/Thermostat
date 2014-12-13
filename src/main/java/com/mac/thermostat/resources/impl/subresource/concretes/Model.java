@@ -48,7 +48,7 @@ public class Model implements Resource, Getter<Model>{
     }
 
     @Override
-    public String getUriString() throws Exception {
+    public String getResourcePath() throws Exception {
         return URI.getUriWithHttp();
     }
     

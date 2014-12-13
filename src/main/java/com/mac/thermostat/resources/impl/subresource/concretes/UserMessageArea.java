@@ -42,9 +42,9 @@ public class UserMessageArea extends MessageArea implements Poster<UserMessageAr
     public UserMessageArea post(UserMessageArea resource) throws Exception {
         RestTemplate template = new RestTemplate();
         if (Objects.isNull(resource)) {
-            return template.postForObject(getUriString(), this, UserMessageArea.class);
+            return template.postForObject(getResourcePath(), this, UserMessageArea.class);
         } else {
-            return template.postForObject(getUriString(), resource, resource.getClass());
+            return template.postForObject(getResourcePath(), resource, resource.getClass());
         }
     }
 

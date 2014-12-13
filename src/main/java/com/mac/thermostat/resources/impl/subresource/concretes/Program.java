@@ -8,7 +8,7 @@ package com.mac.thermostat.resources.impl.subresource.concretes;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mac.thermostat.resources.Getter;
 import com.mac.thermostat.resources.Poster;
-import com.mac.thermostat.resources.TraversableResource;
+import com.mac.thermostat.resources.Resource;
 import com.mac.thermostat.resources.annotations.FeatureAvailability;
 import com.mac.thermostat.resources.annotations.RequestType;
 import com.mac.thermostat.resources.annotations.enums.RestType;
@@ -18,7 +18,6 @@ import com.mac.thermostat.resources.impl.attributes.DayProgram;
 import com.mac.thermostat.resources.impl.attributes.WeekProgram;
 import com.mac.thermostat.resources.impl.subresource.modes.abstracts.Day;
 import com.mac.thermostat.resources.impl.subresource.modes.abstracts.Mode;
-import com.mac.thermostat.resources.impl.utilities.ConcreteResourceURI;
 import com.mac.thermostat.resources.impl.utilities.ResourceURI;
 import java.util.Objects;
 import org.springframework.web.client.RestTemplate;
@@ -36,21 +35,19 @@ import org.springframework.web.client.RestTemplate;
     ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
 @RequestType(types = {RestType.GET, RestType.POST})
-public class Program implements TraversableResource {
+public class Program implements Resource, Getter<Program>, Poster<Program, Program>{
 
     protected ResourceURI URI;
 
+    private Requestor requestor;
     private Mode mode;
     private Day day;
 
-    public Program() throws Exception {
-        URI = Thermostat.URI.clone().path("program");
-    }
+    public Program() throws Exception {}
 
     public Program mode(Mode mode) throws Exception {
         if (Objects.nonNull(mode)) {
             this.mode = mode;
-            //URI = Thermostat.URI.clone().path("program").path(this.mode.getUriString());
         }
         return this;
     }
@@ -58,11 +55,6 @@ public class Program implements TraversableResource {
     public Program day(Day day) throws Exception {
         if (Objects.nonNull(day)) {
             this.day = day;
-//            if (Objects.nonNull(mode)) {
-//                URI = Thermostat.URI.clone().path("program")
-//                        .path(mode.getUriString())
-//                        .path(this.day.getUriString());
-//            }
         }
         return this;
     }
@@ -74,29 +66,54 @@ public class Program implements TraversableResource {
     public Day getDay() {
         return day;
     }
-
-    @Override
-    public ResourceURI builder() {
-        return new ConcreteResourceURI();
+    
+    public Program build() throws Exception{
+        if(Objects.nonNull(mode)){
+            URI = Thermostat.URI.clone().path("program").path(this.mode.getResourcePath());
+            requestor = new ModeRequestor(URI);
+            if(Objects.nonNull(day)){
+                URI = Thermostat.URI.clone().path("program")
+                        .path(mode.getResourcePath())
+                        .path(this.day.getResourcePath());
+                requestor = new DayRequestor(URI);
+            }
+        }
+        return this;
     }
 
     @Override
-    public void setURI(ResourceURI uri) {
-        this.URI = uri;
-    }
-
-    @Override
-    public String getUriString() throws Exception {
+    public String getResourcePath() throws Exception {
         return URI.getUriWithHttp();
     }
 
-    public class ModeRequestor implements Getter<Program>,
-            Poster<Program, Program> {
+    @Override
+    public Program get() throws Exception {
+        if(Objects.isNull(requestor)){
+            return this;
+        }
+        return requestor.get();
+    }
 
-        private final ResourceURI uri;
-
-        private ModeRequestor(ResourceURI uri) {
+    @Override
+    public Program post(Program resource) throws Exception {
+        if(Objects.isNull(requestor)){
+            return this;
+        }
+        return requestor.post(this);
+    }
+    
+    private static abstract class Requestor implements Getter<Program>,
+            Poster<Program, Program>{
+        protected final ResourceURI uri;
+        
+        public Requestor(ResourceURI uri){
             this.uri = uri;
+        }
+    }
+
+    private class ModeRequestor extends Requestor {
+        private ModeRequestor(ResourceURI uri) {
+            super(uri);
         }
 
         @Override
@@ -120,13 +137,9 @@ public class Program implements TraversableResource {
         }
     }//end ModeRequester
     
-    public class DayRequestor implements Getter<Program>,
-            Poster<Program, Program> {
-
-        private final ResourceURI uri;
-
+    private class DayRequestor extends Requestor {
         private DayRequestor(ResourceURI uri) {
-            this.uri = uri;
+            super(uri);
         }
 
         @Override
@@ -149,4 +162,4 @@ public class Program implements TraversableResource {
             return resource;
         }
     }//end DayRequester
-}
+}//end Program
