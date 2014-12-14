@@ -22,7 +22,14 @@ public enum ReadableValue {
     _25("25%"), _50("50%"), _75("75%"), _100("100%"),
     RUN_ONLY_WITH_HEAT("Run only with heat"), 
     HUMIDITY_ANYTIME("Humidity anytime (runs fan)"),
-    ON_WITH_FAN("On with fan"), ON_WITHOUT_FAN("On without fan");
+    ON_WITH_FAN("On with fan"), ON_WITHOUT_FAN("On without fan"),
+    HUMIDISTAT_WITH_THERMOSTAT("Humidistat with thermostat"),
+    ALWAYS_WITH_AC("Always with AC"), _12_HOUR_FORMAT("12 Hour format AM/PM"),
+    _24_HOUR_FORMAT("24 Hour format"),
+    EXTERNAL_AIR_BAFFLE_CLOSED("External air baffle closed"),
+    EXTERNAL_AIR_BAFFLE_OPENED_TEMP("External air baffle opened temporarily"),
+    EXTERNAL_AIR_BAFFLE_OPENED_PERM("External air baffle opened permanently (set by radio bus only"),
+    NORMAL("Normal"), HEAT_PUMP("Heat pump");
     
     private final String value;
     
