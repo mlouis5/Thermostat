@@ -130,8 +130,6 @@ public class HvacSettings extends SimpleGetter<HvacSettings> {
     }
     
     @Override
-    protected void doBeforeGet() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    protected void doBeforeGet() {}
 
 }

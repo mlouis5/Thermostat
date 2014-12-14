@@ -8,6 +8,7 @@ package com.mac.thermostat.resources.impl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mac.thermostat.resources.Resource;
 import com.mac.thermostat.resources.TraversableResource;
 import com.mac.thermostat.resources.annotations.FeatureAvailability;
 import com.mac.thermostat.resources.annotations.RequestType;
@@ -44,7 +45,7 @@ import java.util.logging.Logger;
 @FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,
     ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Thermostat implements TraversableResource {
+public class Thermostat implements Resource {
 
     public static final ResourceURI URI;
 
@@ -384,18 +385,7 @@ public class Thermostat implements TraversableResource {
     }
 
     @Override
-    public String getResourcePath() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String getResourcePath() throws Exception {
+        return URI.getUriWithHttp();
     }
-
-    @Override
-    public ResourceURI builder() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void setURI(ResourceURI uri) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
 }
