@@ -3,15 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mac.thermostat.resources.impl.subresource.concretes;
+package com.mac.thermostat.resources.impl.subresource.thermostat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mac.thermostat.resources.annotations.AttributeInterpreter;
 import com.mac.thermostat.resources.annotations.FeatureAvailability;
 import com.mac.thermostat.resources.annotations.RequestType;
+import com.mac.thermostat.resources.annotations.enums.ReadableValue;
 import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
+import com.mac.thermostat.resources.impl.Thermostat;
 import com.mac.thermostat.resources.impl.utilities.SimpleRequester;
 
 /**
@@ -21,35 +24,36 @@ import com.mac.thermostat.resources.impl.utilities.SimpleRequester;
 @FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,
     ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TempSwing extends SimpleRequester<TempSwing> {
-
+public class SimpleMode extends SimpleRequester<SimpleMode>{
+    
     @JsonIgnore
-    private static final String RESOURCE = "tswing";
+    private static final String RESOURCE = "simple_mode";
     @JsonIgnore
-    private static final float MIN_SWING = .5f;
+    private static final int NORMAL_MODE = 1;
     @JsonIgnore
-    private static final float MAX_SWING = 3f;
+    private static final int SIMPLE_MODE = 2;
     /**
-     * Description: Thermostat temperature swing<br>
-     * Request Type: GET, POST<br>
-     * Data Format: Float value 0.5 degree increments with a valid<br>
-     * temperature range from 0.5 to 3.0 degrees F.
+     * Description: Thermostat Lock Mode
+     * Request Type: GET, POST
+     * Data Format: Integer value:
+     * 1 = normal mode
+     * 2 = simple mode
      */
     @RequestType(types = {RestType.GET, RestType.POST})
-    @JsonProperty("RESOURCE")
-    private float tSwing;
+    @JsonProperty("simple_mode")
+    @AttributeInterpreter(key = {1, 2}, values = {ReadableValue.NORMAL_MODE, ReadableValue.SIMPLE_MODE})
+    private int simpleMode;
 
-    public TempSwing() throws Exception {
-        super(TempSwing.class, RESOURCE);
+    public SimpleMode() throws Exception {
+        super(Thermostat.URI, SimpleMode.class, RESOURCE);
     }
 
-    public float gettSwing() {
-        return tSwing;
+    public int getSimpleMode() {
+        return simpleMode;
     }
 
-    public void settSwing(float tSwing) {
-        this.tSwing = tSwing < MIN_SWING ? MIN_SWING
-                : tSwing > MAX_SWING ? MAX_SWING : tSwing;
+    public void setSimpleMode(int simpleMode) {
+        this.simpleMode = simpleMode == SIMPLE_MODE ? simpleMode : NORMAL_MODE;
     }
 
     @Override
@@ -57,4 +61,5 @@ public class TempSwing extends SimpleRequester<TempSwing> {
 
     @Override
     protected void doBeforePost() {}
+    
 }

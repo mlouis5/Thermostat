@@ -5,13 +5,12 @@
  */
 package com.mac.thermostat.resources.impl.subresource;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mac.thermostat.resources.Resource;
 import com.mac.thermostat.resources.annotations.RequestType;
 import com.mac.thermostat.resources.annotations.enums.RestType;
-import com.mac.thermostat.resources.impl.Thermostat;
+import com.mac.thermostat.resources.impl.utilities.ResourceURI;
 import com.mac.thermostat.resources.impl.utilities.SimplePoster;
 
 /**
@@ -47,8 +46,8 @@ public abstract class MessageArea<T extends Resource>  extends SimplePoster<T>{
     @JsonProperty("message")
     protected String message;
     
-    public MessageArea(Class<T> tType, String resource) throws Exception{
-        super(tType, resource);
+    public MessageArea(ResourceURI uri, Class<T> tType, String resource) throws Exception{
+        super(uri, tType, resource);
     }
     
     public abstract void setLine(int line);

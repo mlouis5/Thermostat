@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mac.thermostat.resources.impl.subresource.concretes;
+package com.mac.thermostat.resources.impl.subresource.thermostat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mac.thermostat.resources.Resource;
 import com.mac.thermostat.resources.annotations.RequestType;
 import com.mac.thermostat.resources.annotations.enums.RestType;
+import com.mac.thermostat.resources.impl.Thermostat;
 import com.mac.thermostat.resources.impl.utilities.SimpleRequester;
 
 /**
@@ -36,7 +37,7 @@ public class FanCirculationTime extends SimpleRequester<FanCirculationTime> impl
     private int fanCTime;
 
     public FanCirculationTime() throws Exception {
-        super(FanCirculationTime.class, RESOURCE);
+        super(Thermostat.URI, FanCirculationTime.class, RESOURCE);
     }
 
     public int getFanCTime() {

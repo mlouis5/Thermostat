@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mac.thermostat.resources.impl.subresource.concretes;
+package com.mac.thermostat.resources.impl.subresource.thermostat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -14,6 +14,7 @@ import com.mac.thermostat.resources.annotations.RequestType;
 import com.mac.thermostat.resources.annotations.enums.ReadableValue;
 import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
+import com.mac.thermostat.resources.impl.Thermostat;
 import com.mac.thermostat.resources.impl.utilities.SimplePoster;
 
 /**
@@ -39,7 +40,7 @@ public class LED extends SimplePoster<LED> {
     private int energyLed;
 
     public LED() throws Exception {
-        super(LED.class, RESOURCE);
+        super(Thermostat.URI, LED.class, RESOURCE);
     }
 
     public int getEnergyLed() {

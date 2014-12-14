@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mac.thermostat.resources.impl.subresource.concretes;
+package com.mac.thermostat.resources.impl.subresource.thermostat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -14,48 +14,53 @@ import com.mac.thermostat.resources.annotations.RequestType;
 import com.mac.thermostat.resources.annotations.enums.ReadableValue;
 import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
+import com.mac.thermostat.resources.impl.Thermostat;
 import com.mac.thermostat.resources.impl.utilities.SimpleRequester;
 
 /**
- * Thermostat Time Format<br>
+ * Thermostat Air Baffle<br>
  * This resource is available at:<br>
- * • http://<ip-address>/tstat/time/format
- *
+ * http://<ip-address>/tstat/air_baffle
+ * 
  * @author Mac
  */
 @FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,
     ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TimeFormat extends SimpleRequester<TimeFormat> {
+public class AirBaffle extends SimpleRequester<AirBaffle> {
 
     @JsonIgnore
-    private static final String RESOURCE = "time/format";
+    private static final String RESOURCE = "air_baffle";
     @JsonIgnore
-    private static final int TWELVE_FORMAT = 1;
+    private static final int MIN_BAFFLE_MODE = 1;
     @JsonIgnore
-    private static final int TWENTY_FOURS_FORMAT = 2;
+    private static final int MAX_BAFFLE_MODE = 2;
     /**
-     * Description: Time display format<br>
+     * Description: External air baffle mode<br>
      * Request Type: GET, POST<br>
-     * Data Format: Integer value: 1 = 12 hour format (AM/PM) 2 = 24 hour format
+     * Data Format: Integer value:<br> 0 = External air baffle closed<br>
+     * 1 = External air baffle opened temporarily<br>
+     * 2 = External air baffle opened permanently (set by radio bus only)
      */
     @RequestType(types = {RestType.GET, RestType.POST})
-    @JsonProperty("format")
-    @AttributeInterpreter(key = {1, 2},
-            values = {ReadableValue._12_HOUR_FORMAT, ReadableValue._24_HOUR_FORMAT})
-    private int format;
+    @JsonProperty("baffle_mode")
+    @AttributeInterpreter(key = {0, 1, 2},
+            values = {ReadableValue.EXTERNAL_AIR_BAFFLE_CLOSED, ReadableValue.EXTERNAL_AIR_BAFFLE_OPENED_TEMP,
+                ReadableValue.EXTERNAL_AIR_BAFFLE_OPENED_PERM})
+    private int baffleMode;
 
-    public TimeFormat() throws Exception {
-        super(TimeFormat.class, RESOURCE);
+    public AirBaffle() throws Exception {
+        super(Thermostat.URI, AirBaffle.class, RESOURCE);
     }
 
-    public int getFormat() {
-        return format;
+    public int getBaffleMode() {
+        return baffleMode;
     }
 
-    public void setFormat(int format) {
-        this.format = format == TWENTY_FOURS_FORMAT ? TWENTY_FOURS_FORMAT
-                : TWELVE_FORMAT;
+    public void setBaffleMode(int baffleMode) {
+        this.baffleMode = baffleMode < MIN_BAFFLE_MODE ? MIN_BAFFLE_MODE
+                : baffleMode > MAX_BAFFLE_MODE ? MAX_BAFFLE_MODE
+                        : baffleMode;
     }
 
     @Override

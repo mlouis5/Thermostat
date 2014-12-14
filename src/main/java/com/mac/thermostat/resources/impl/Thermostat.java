@@ -15,26 +15,26 @@ import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
 import com.mac.thermostat.resources.impl.attributes.Time;
 import com.mac.thermostat.resources.impl.subresource.MessageArea;
-import com.mac.thermostat.resources.impl.subresource.concretes.AirBaffle;
-import com.mac.thermostat.resources.impl.subresource.concretes.Dehumidifier;
-import com.mac.thermostat.resources.impl.subresource.concretes.ExternalDehumidifier;
-import com.mac.thermostat.resources.impl.subresource.concretes.FanCirculationTime;
-import com.mac.thermostat.resources.impl.subresource.concretes.Humidifier;
-import com.mac.thermostat.resources.impl.subresource.concretes.HumidifierSetpoint;
-import com.mac.thermostat.resources.impl.subresource.concretes.Humidity;
-import com.mac.thermostat.resources.impl.subresource.concretes.LED;
-import com.mac.thermostat.resources.impl.subresource.concretes.Lock;
-import com.mac.thermostat.resources.impl.subresource.concretes.Model;
-import com.mac.thermostat.resources.impl.subresource.concretes.NightLight;
-import com.mac.thermostat.resources.impl.subresource.concretes.PriceMessageArea;
-import com.mac.thermostat.resources.impl.subresource.concretes.Program;
-import com.mac.thermostat.resources.impl.subresource.concretes.RemoteTemp;
-import com.mac.thermostat.resources.impl.subresource.concretes.SaveEnergy;
-import com.mac.thermostat.resources.impl.subresource.concretes.SimpleMode;
-import com.mac.thermostat.resources.impl.subresource.concretes.StageDelay;
-import com.mac.thermostat.resources.impl.subresource.concretes.TempSwing;
-import com.mac.thermostat.resources.impl.subresource.concretes.TimeFormat;
-import com.mac.thermostat.resources.impl.subresource.concretes.UserMessageArea;
+import com.mac.thermostat.resources.impl.subresource.thermostat.AirBaffle;
+import com.mac.thermostat.resources.impl.subresource.thermostat.Dehumidifier;
+import com.mac.thermostat.resources.impl.subresource.thermostat.ExternalDehumidifier;
+import com.mac.thermostat.resources.impl.subresource.thermostat.FanCirculationTime;
+import com.mac.thermostat.resources.impl.subresource.thermostat.Humidifier;
+import com.mac.thermostat.resources.impl.subresource.thermostat.HumidifierSetpoint;
+import com.mac.thermostat.resources.impl.subresource.thermostat.Humidity;
+import com.mac.thermostat.resources.impl.subresource.thermostat.LED;
+import com.mac.thermostat.resources.impl.subresource.thermostat.Lock;
+import com.mac.thermostat.resources.impl.subresource.thermostat.Model;
+import com.mac.thermostat.resources.impl.subresource.thermostat.NightLight;
+import com.mac.thermostat.resources.impl.subresource.thermostat.PriceMessageArea;
+import com.mac.thermostat.resources.impl.subresource.thermostat.Program;
+import com.mac.thermostat.resources.impl.subresource.thermostat.RemoteTemp;
+import com.mac.thermostat.resources.impl.subresource.thermostat.SaveEnergy;
+import com.mac.thermostat.resources.impl.subresource.thermostat.SimpleMode;
+import com.mac.thermostat.resources.impl.subresource.thermostat.StageDelay;
+import com.mac.thermostat.resources.impl.subresource.thermostat.TempSwing;
+import com.mac.thermostat.resources.impl.subresource.thermostat.TimeFormat;
+import com.mac.thermostat.resources.impl.subresource.thermostat.UserMessageArea;
 import com.mac.thermostat.resources.impl.subresource.modes.abstracts.TempDifferential;
 import com.mac.thermostat.resources.impl.subresource.modes.concretes.Cool;
 import com.mac.thermostat.resources.impl.subresource.modes.concretes.Heat;
@@ -65,7 +65,7 @@ import java.util.logging.Logger;
 public class Thermostat implements Resource {
 
     public static final ResourceURI URI;
-
+    
     static {
         URI = new ConcreteResourceURI();
 

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mac.thermostat.resources.impl.subresource.concretes;
+package com.mac.thermostat.resources.impl.subresource.thermostat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -13,6 +13,7 @@ import com.mac.thermostat.resources.annotations.FeatureAvailability;
 import com.mac.thermostat.resources.annotations.RequestType;
 import com.mac.thermostat.resources.annotations.enums.ReadableValue;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
+import com.mac.thermostat.resources.impl.Thermostat;
 import com.mac.thermostat.resources.impl.utilities.SimpleGetter;
 
 /**
@@ -102,7 +103,7 @@ public class HvacSettings extends SimpleGetter<HvacSettings> {
     private Integer coolStages;
 
     public HvacSettings() throws Exception {
-        super(HvacSettings.class, RESOURCE);
+        super(Thermostat.URI, HvacSettings.class, RESOURCE);
     }
 
     public int getPump() {

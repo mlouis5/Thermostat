@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mac.thermostat.resources.impl.subresource.concretes;
+package com.mac.thermostat.resources.impl.subresource.thermostat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -14,20 +14,21 @@ import com.mac.thermostat.resources.annotations.RequestType;
 import com.mac.thermostat.resources.annotations.enums.ReadableValue;
 import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
+import com.mac.thermostat.resources.impl.Thermostat;
 import com.mac.thermostat.resources.impl.utilities.SimpleRequester;
 
 /**
- * Thermostat Dehumidifier<br>
+ * Thermostat External Dehumidifier<br>
  * This resource is available at:<br>
- * http://<ip-address>/tstat/dehumidifier (Only available on CT80)<br>
+•  http://<ip-address>/tstat/ext_dehumidifier (Only available on CT80)
  * @author Mac
  */
 @FeatureAvailability(model = {ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Dehumidifier extends SimpleRequester<Dehumidifier> {
+public class ExternalDehumidifier extends SimpleRequester<ExternalDehumidifier> {
 
     @JsonIgnore
-    private static final String RESOURCE = "dehumidifier";
+    private static final String RESOURCE = "ext_dehumidifier";
 
     @JsonIgnore
     private static final int MIN_MODE = 0;
@@ -38,15 +39,16 @@ public class Dehumidifier extends SimpleRequester<Dehumidifier> {
     @JsonIgnore
     private static final int MAX_SETPOINT = 90;
     /**
-     * Description: Dehumidifier mode <br>
+     * Description: External dehumidifier mode<br>
      * Request Type: GET, POST<br>
-     * Data Format: Integer value: 0 = off 1 = on with fan 2 = on without fan
+     * Data Format: Integer value: 0 = off 1 = Humidistat with 
+     * thermostat 2 = Always with AC
      */
     @RequestType(types = {RestType.GET, RestType.POST})
     @JsonProperty("mode")
     @AttributeInterpreter(key = {0, 1, 2},
-            values = {ReadableValue.OFF, ReadableValue.ON_WITH_FAN,
-                ReadableValue.ON_WITHOUT_FAN})
+            values = {ReadableValue.OFF, ReadableValue.HUMIDISTAT_WITH_THERMOSTAT,
+                ReadableValue.ALWAYS_WITH_AC})
     private int mode;
     /**
      * Description: Dehumidifier setpoint<br>
@@ -57,8 +59,8 @@ public class Dehumidifier extends SimpleRequester<Dehumidifier> {
     @JsonProperty("setpoint")
     private int setpoint;
 
-    public Dehumidifier() throws Exception {
-        super(Dehumidifier.class, RESOURCE);
+    public ExternalDehumidifier() throws Exception {
+        super(Thermostat.URI, ExternalDehumidifier.class, RESOURCE);
     }
 
     public int getMode() {

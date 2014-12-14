@@ -6,7 +6,9 @@
 package com.mac.thermostat.resources.impl;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mac.thermostat.resources.annotations.FeatureAvailability;
+import com.mac.thermostat.resources.annotations.RequestType;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
 import com.mac.thermostat.resources.impl.utilities.ConcreteResourceURI;
 import com.mac.thermostat.resources.impl.utilities.ResourceURI;
@@ -23,7 +25,7 @@ import java.util.logging.Logger;
     ThermostatModel.CT80A, ThermostatModel.CT80B})
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class System {
-    
+
     public static final ResourceURI URI;
 
     static {
@@ -37,4 +39,48 @@ public class System {
             Logger.getLogger(Thermostat.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    /**
+     * Description: unique identifier for the device Request Type: GET Data
+     * Format: String
+     */
+    @RequestType
+    @JsonProperty("UUID")
+    private String UUID;
+    /**
+     * Description: HTTP API version Request Type: GET Data Format: integer
+     */
+    @RequestType
+    @JsonProperty("api_version")
+    private int apiVersion;    
+    /**
+     * Description: Firmware version Request Type: GET Data Format: String
+     */
+    @RequestType
+    @JsonProperty("fw_version")
+    private String fwVersion;
+    /**
+     * Description: Underlying WLAN firmware version Request Type: GET Data
+     * Format: String
+     */
+    @RequestType
+    @JsonProperty("wlan_fw_version")
+    private String wlanFwVersion;
+
+    public String getUUID() {
+        return UUID;
+    }
+
+    public int getApiVersion() {
+        return apiVersion;
+    }
+
+    public String getFwVersion() {
+        return fwVersion;
+    }
+
+    public String getWlanFwVersion() {
+        return wlanFwVersion;
+    }
+        
 }

@@ -28,6 +28,10 @@ public class Temperature implements Comparable<Temperature>{
     public Temperature(double temp){
         this.temp = temp;
     }
+
+    public void setTemp(double temp) {
+        this.temp = temp;
+    }
     
     public double asCelcius(){
         return (this.temp - celciusConstant) * celciusPercent;
@@ -39,12 +43,6 @@ public class Temperature implements Comparable<Temperature>{
     
     public double asKelvin(){
         return asCelcius() + kelvinConstant;
-    }
-    
-    public static final void main(String[] args){
-        Temperature temp = new Temperature(98.6);
-        System.out.println(temp.asCelcius());
-        System.out.println(temp.asKelvin());
     }
 
     @Override

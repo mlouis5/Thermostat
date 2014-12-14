@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mac.thermostat.resources.impl.subresource.concretes;
+package com.mac.thermostat.resources.impl.subresource.thermostat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mac.thermostat.resources.annotations.FeatureAvailability;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
+import com.mac.thermostat.resources.impl.Thermostat;
 import com.mac.thermostat.resources.impl.subresource.MessageArea;
 
 /**
@@ -28,7 +29,7 @@ public class UserMessageArea extends MessageArea<UserMessageArea> {
     private static final int MAX_LINE = 1;
 
     public UserMessageArea() throws Exception {
-        super(UserMessageArea.class, RESOURCE);
+        super(Thermostat.URI, UserMessageArea.class, RESOURCE);
     }
 
     @Override

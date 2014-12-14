@@ -6,8 +6,6 @@
 package com.mac.thermostat.resources.impl.utilities;
 
 import com.mac.thermostat.resources.Getter;
-import com.mac.thermostat.resources.Resource;
-import com.mac.thermostat.resources.impl.Thermostat;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -15,19 +13,13 @@ import org.springframework.web.client.RestTemplate;
  * @author Mac
  * @param <T>
  */
-public abstract class SimpleGetter <T> implements Resource, Getter<T>{
+public abstract class SimpleGetter <T> extends ResourceLocator implements Getter<T>{
 
-    private final String path;
     private final Class<T> tType;
     
-    public SimpleGetter(Class<T> tType, String resource) throws Exception{
-        this.path = resource;
+    public SimpleGetter(ResourceURI baseResource, Class<T> tType, String... resources) throws Exception{
+        super(baseResource, resources);
         this.tType = tType;
-    }
-    
-    @Override
-    public String getResourcePath() throws Exception {
-        return Thermostat.URI.clone().path(path).build().getUriWithHttp();
     }
         
     @Override
