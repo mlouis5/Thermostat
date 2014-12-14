@@ -20,7 +20,7 @@ import com.mac.thermostat.resources.impl.utilities.SimpleRequester;
 /**
  * Thermostat Time Format<br>
  * This resource is available at:<br>
- * • http://<ip-address>/tstat/time/format
+ * • http://&lt;ip-address&gt;/tstat/time/format
  *
  * @author Mac
  */
