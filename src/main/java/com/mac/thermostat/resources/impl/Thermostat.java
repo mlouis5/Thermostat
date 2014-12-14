@@ -9,18 +9,35 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mac.thermostat.resources.Resource;
-import com.mac.thermostat.resources.TraversableResource;
 import com.mac.thermostat.resources.annotations.FeatureAvailability;
 import com.mac.thermostat.resources.annotations.RequestType;
 import com.mac.thermostat.resources.annotations.enums.RestType;
 import com.mac.thermostat.resources.annotations.enums.ThermostatModel;
 import com.mac.thermostat.resources.impl.attributes.Time;
 import com.mac.thermostat.resources.impl.subresource.MessageArea;
+import com.mac.thermostat.resources.impl.subresource.concretes.AirBaffle;
+import com.mac.thermostat.resources.impl.subresource.concretes.Dehumidifier;
+import com.mac.thermostat.resources.impl.subresource.concretes.ExternalDehumidifier;
+import com.mac.thermostat.resources.impl.subresource.concretes.FanCirculationTime;
+import com.mac.thermostat.resources.impl.subresource.concretes.Humidifier;
+import com.mac.thermostat.resources.impl.subresource.concretes.HumidifierSetpoint;
+import com.mac.thermostat.resources.impl.subresource.concretes.Humidity;
 import com.mac.thermostat.resources.impl.subresource.concretes.LED;
+import com.mac.thermostat.resources.impl.subresource.concretes.Lock;
 import com.mac.thermostat.resources.impl.subresource.concretes.Model;
+import com.mac.thermostat.resources.impl.subresource.concretes.NightLight;
 import com.mac.thermostat.resources.impl.subresource.concretes.PriceMessageArea;
 import com.mac.thermostat.resources.impl.subresource.concretes.Program;
+import com.mac.thermostat.resources.impl.subresource.concretes.RemoteTemp;
+import com.mac.thermostat.resources.impl.subresource.concretes.SaveEnergy;
+import com.mac.thermostat.resources.impl.subresource.concretes.SimpleMode;
+import com.mac.thermostat.resources.impl.subresource.concretes.StageDelay;
+import com.mac.thermostat.resources.impl.subresource.concretes.TempSwing;
+import com.mac.thermostat.resources.impl.subresource.concretes.TimeFormat;
 import com.mac.thermostat.resources.impl.subresource.concretes.UserMessageArea;
+import com.mac.thermostat.resources.impl.subresource.modes.abstracts.TempDifferential;
+import com.mac.thermostat.resources.impl.subresource.modes.concretes.Cool;
+import com.mac.thermostat.resources.impl.subresource.modes.concretes.Heat;
 import com.mac.thermostat.resources.impl.utilities.ConcreteResourceURI;
 import com.mac.thermostat.resources.impl.utilities.ResourceURI;
 import java.net.InetAddress;
@@ -62,6 +79,11 @@ public class Thermostat implements Resource {
 
     }
 
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////ATTRIBUTES/////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
     /**
      * Description: Current Temperature Request Type: GET Data Format: double,
      * representing temp in Fahrenheit
@@ -208,28 +230,112 @@ public class Thermostat implements Resource {
     @RequestType    //defaults to REstType.GET
     @JsonProperty("ttarget")
     private int tTarget;
-
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////END ATTRIBUTES///////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////RESOURCES/////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
     @JsonIgnore
-    private Program program;
+    private final Program program;
 
     @JsonIgnore
     private final Model model;
 
     @JsonIgnore
-    private LED led;
+    private final LED led;
+    
+    @JsonIgnore
+    private final MessageArea PMA;
 
     @JsonIgnore
-    private MessageArea UMA;
-
+    private final MessageArea UMA;
+    
     @JsonIgnore
-    private MessageArea PMA;
+    private final RemoteTemp remoteTemp;
+    
+    @JsonIgnore
+    private final Lock lock;
+    
+    @JsonIgnore
+    private final SimpleMode simpleMode;
+    
+    @JsonIgnore
+    private final SaveEnergy saveEnergy;
+    
+    @JsonIgnore
+    private final TempSwing tempSwing;
+    
+    @JsonIgnore
+    private final NightLight nightLight;
+    
+    @JsonIgnore
+    private final TempDifferential cool;
+    
+    @JsonIgnore
+    private final TempDifferential heat;
+    
+    @JsonIgnore
+    private final StageDelay stageDelay;
+    
+    @JsonIgnore
+    private final FanCirculationTime fanCirculationTime;
+    
+    @JsonIgnore
+    private final Humidity humidity;
+    
+    @JsonIgnore
+    private final HumidifierSetpoint humidifierSetpoint;
+    
+    @JsonIgnore
+    private final Humidifier humidifier;
+    
+    @JsonIgnore
+    private final Dehumidifier dehumidifier;
+    
+    @JsonIgnore
+    private final ExternalDehumidifier externalDehumidifier;
+    
+    @JsonIgnore
+    private final TimeFormat timeFormat;
+    
+    @JsonIgnore
+    private final AirBaffle airBaffle;
+    
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////END RESOURCES///////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
 
     public Thermostat() throws Exception {
         program = new Program();
         model = new Model();
         led = new LED();
-        UMA = new UserMessageArea();
         PMA = new PriceMessageArea();
+        UMA = new UserMessageArea();
+        remoteTemp = new RemoteTemp();
+        lock = new Lock();
+        simpleMode = new SimpleMode();
+        saveEnergy = new SaveEnergy();
+        tempSwing = new TempSwing();
+        nightLight = new NightLight();
+        cool = new Cool();
+        heat = new Heat();
+        stageDelay = new StageDelay();
+        fanCirculationTime = new FanCirculationTime();
+        humidity = new Humidity();
+        humidifierSetpoint = new HumidifierSetpoint();
+        humidifier = new Humidifier();
+        dehumidifier = new Dehumidifier();
+        externalDehumidifier = new ExternalDehumidifier();
+        timeFormat = new TimeFormat();
+        airBaffle = new AirBaffle();
     }
 
     public double getTemp() {
@@ -367,22 +473,113 @@ public class Thermostat implements Resource {
     public void settTarget(int tTarget) {
         this.tTarget = tTarget;
     }
-
+    
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////RESOURCES ACCESSORS////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    /**
+     * Thermostat Program Resource<br><br>
+     * The thermostat maintains two programs<br>
+     * a heat program and a cool program. Every program entry consists<br>
+     * of time and the corresponding temperature setpoint. Every day of the week<br>
+     * can have a set of time-setpoint pair programmed in the thermostat.<br>
+     * @return Program
+     */
     public Program getProgram() {
         return program;
     }
 
-    public void setProgram(Program program) {
-        this.program = program;
-    }
-
-    public Model getModel() throws Exception {
+    public Model getModel() {
         return model;
     }
 
     public LED getLed() {
         return led;
     }
+
+    public MessageArea getPMA() {
+        return PMA;
+    }
+
+    public MessageArea getUMA() {
+        return UMA;
+    }
+
+    public RemoteTemp getRemoteTemp() {
+        return remoteTemp;
+    }
+
+    public Lock getLock() {
+        return lock;
+    }
+
+    public SimpleMode getSimpleMode() {
+        return simpleMode;
+    }
+
+    public SaveEnergy getSaveEnergy() {
+        return saveEnergy;
+    }
+
+    public TempSwing getTempSwing() {
+        return tempSwing;
+    }
+
+    public NightLight getNightLight() {
+        return nightLight;
+    }
+
+    public TempDifferential getCool() {
+        return cool;
+    }
+
+    public TempDifferential getHeat() {
+        return heat;
+    }
+
+    public StageDelay getStageDelay() {
+        return stageDelay;
+    }
+
+    public FanCirculationTime getFanCirculationTime() {
+        return fanCirculationTime;
+    }
+
+    public Humidity getHumidity() {
+        return humidity;
+    }
+
+    public HumidifierSetpoint getHumidifierSetpoint() {
+        return humidifierSetpoint;
+    }
+
+    public Humidifier getHumidifier() {
+        return humidifier;
+    }
+
+    public Dehumidifier getDehumidifier() {
+        return dehumidifier;
+    }
+
+    public ExternalDehumidifier getExternalDehumidifier() {
+        return externalDehumidifier;
+    }
+
+    public TimeFormat getTimeFormat() {
+        return timeFormat;
+    }
+
+    public AirBaffle getAirBaffle() {
+        return airBaffle;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////END RESOURCES ACCESSORS//////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
 
     @Override
     public String getResourcePath() throws Exception {

@@ -64,6 +64,12 @@ public class Program implements Resource, Getter<Program>, Poster<Program> {
         return mode;
     }
 
+    /**
+     * Thermostat Program for a Day<br>
+     * The thermostat program for a single day (for either the heat or cool)<br>
+     * mode can be accessed directly using a URI as follows:<br>
+     * @return 
+     */
     public Day getDay() {
         return day;
     }

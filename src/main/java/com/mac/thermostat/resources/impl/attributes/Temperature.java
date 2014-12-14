@@ -6,13 +6,14 @@
 package com.mac.thermostat.resources.impl.attributes;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.Objects;
 
 /**
  *
  * @author MacDerson
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Temperature {
+public class Temperature implements Comparable<Temperature>{
 
     private static final double celciusPercent = .5556;
     private static final int celciusConstant = 32;
@@ -44,5 +45,13 @@ public class Temperature {
         Temperature temp = new Temperature(98.6);
         System.out.println(temp.asCelcius());
         System.out.println(temp.asKelvin());
+    }
+
+    @Override
+    public int compareTo(Temperature o) {
+        if(Objects.isNull(o)){
+            return -1;
+        }
+        return  Objects.equals(temp, o.temp) ? 0 : ((temp - o.temp) < 0) ? -1 : 1;
     }
 }

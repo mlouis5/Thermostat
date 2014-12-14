@@ -15,7 +15,12 @@ import com.mac.thermostat.resources.impl.attributes.DayProgram.DayType;
 
 
 /**
- *
+ * Thermostat Program for a Day<br>
+ * The thermostat program for a single day (for either the heat or cool) mode<br>
+ * can be accessed directly using a URI as follows:<br>
+ * http&colon;&sol;&sol;&lt;ip-address&gt;&sol;tstat&sol;program&sol;&lt;mode&gt;&sol;&lt;day&gt;<br>
+ * where &lt;mode&gt; is either heat or cool. The &lt;day&gt; is 
+ * one of mon, tue, wed, thu, fri, sat, or sun.
  * @author MacDerson
  */
 @FeatureAvailability(model = {ThermostatModel.CT30, ThermostatModel.CT50,

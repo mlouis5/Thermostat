@@ -7,17 +7,24 @@ package com.mac.thermostat.resources.impl.attributes;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import java.util.HashMap;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.mac.thermostat.resources.impl.json.deserializers.DayDeserializer;
+import com.mac.thermostat.resources.impl.json.serializers.DaySerializer;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
+import java.util.TreeMap;
 
 /**
  *
  * @author Mac
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonSerialize(using = DaySerializer.class)
+@JsonDeserialize(using = DayDeserializer.class)
 public class DayProgram {
 
     public enum DayType {
@@ -41,8 +48,8 @@ public class DayProgram {
         public String value() {
             return String.valueOf(dayVal);
         }
-        
-        public String abbreviation(){
+
+        public String abbreviation() {
             return abbr;
         }
     }
@@ -53,11 +60,16 @@ public class DayProgram {
     private final Map<Minute, Temperature> values;
 
     public DayProgram() {
-        values = new HashMap();
+        values = new TreeMap();
     }
 
-    public DayProgram(List<Minute> minutes, List<Temperature> temperatures) {
-        values = new HashMap();
+    public DayProgram(DayType day) {
+        values = new TreeMap();
+        this.day = day;
+    }
+
+    public DayProgram(DayType day, List<Minute> minutes, List<Temperature> temperatures) {
+        values = new TreeMap();
         fillMap(minutes, temperatures);
     }
 
@@ -66,6 +78,17 @@ public class DayProgram {
         for (i = 0, c = minutes.size(); i < minutes.size() && temperatures.size() == c; i++) {
             values.put(minutes.get(i), temperatures.get(i));
         }
+    }
+
+    public void addToProgram(Minute minute, Temperature temperature) {
+        if (Objects.nonNull(minute) && Objects.nonNull(temperature)) {
+            System.out.println(minute + "   " + temperature);
+            values.put(minute, temperature);
+        }
+    }
+
+    public void setDayType(DayType day) {
+        this.day = day;
     }
 
     public DayType getDayType() {

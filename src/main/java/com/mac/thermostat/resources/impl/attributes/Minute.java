@@ -16,7 +16,7 @@ import java.util.Objects;
  * @author MacDerson
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Minute {
+public class Minute implements Comparable<Minute>{
 
     private static final double WHOLE_DAY = 1440;
     private static final int NOON = 720;
@@ -77,6 +77,14 @@ public class Minute {
         }
         final Minute other = (Minute) obj;
         return Objects.equals(this.minute, other.minute);
+    }
+
+    @Override
+    public int compareTo(Minute o) {
+        if(Objects.isNull(o)){
+            return -1;
+        }
+        return this.minute - o.minute;
     }
 
     

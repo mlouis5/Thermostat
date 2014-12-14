@@ -11,30 +11,26 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.mac.thermostat.resources.impl.attributes.DayProgram;
-import com.mac.thermostat.resources.impl.attributes.DayProgram.DayType;
 import com.mac.thermostat.resources.impl.attributes.Minute;
 import com.mac.thermostat.resources.impl.attributes.Temperature;
-import com.mac.thermostat.resources.impl.attributes.WeekProgram;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
  * @author Mac
  */
-public class WeekDeserializer extends JsonDeserializer<WeekProgram> {
+public class DayDeserializer extends JsonDeserializer<DayProgram> {
 
     @Override
-    public WeekProgram deserialize(JsonParser jp, DeserializationContext dc) throws IOException, JsonProcessingException {
+    public DayProgram deserialize(JsonParser jp, DeserializationContext dc) throws IOException, JsonProcessingException {
         JsonNode rootNode = jp.getCodec().readTree(jp);
-        
-        Map<DayType, DayProgram> week = new HashMap(7);
-        DayType[] types = DayType.class.getEnumConstants();
-        for(DayType dayType : types){
+               
+        DayProgram day = null;
+        DayProgram.DayType[] types = DayProgram.DayType.class.getEnumConstants();
+        for(DayProgram.DayType dayType : types){
             JsonNode singleDay = rootNode.path(dayType.value());
             
             if(!singleDay.isMissingNode()){
@@ -54,11 +50,10 @@ public class WeekDeserializer extends JsonDeserializer<WeekProgram> {
                         temps.add(temp);
                     }
                 }                
-                DayProgram day = new DayProgram(dayType, mins, temps);
-                week.put(dayType, day);
+                day = new DayProgram(dayType, mins, temps);
+                return day;
             }
         }        
-        return new WeekProgram(week);
-    }
-    
+        return day;
+    }    
 }

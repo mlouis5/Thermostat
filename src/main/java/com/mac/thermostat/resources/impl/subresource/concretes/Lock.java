@@ -43,7 +43,7 @@ public class Lock extends SimpleRequester<Lock> {
                 ReadableValue.FULL_LOCK, ReadableValue.UTILITY_LOCK})
     private int lockMode;
 
-    public Lock(Class<Lock> tType, String resource) throws Exception {
+    public Lock() throws Exception {
         super(Lock.class, RESOURCE);
     }
 

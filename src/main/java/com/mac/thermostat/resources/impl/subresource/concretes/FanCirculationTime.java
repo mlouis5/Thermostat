@@ -35,7 +35,7 @@ public class FanCirculationTime extends SimpleRequester<FanCirculationTime> impl
     @JsonProperty(RESOURCE)
     private int fanCTime;
 
-    public FanCirculationTime(Class<FanCirculationTime> tType, String resource) throws Exception {
+    public FanCirculationTime() throws Exception {
         super(FanCirculationTime.class, RESOURCE);
     }
 

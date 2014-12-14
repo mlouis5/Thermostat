@@ -42,7 +42,7 @@ public class NightLight extends SimpleRequester<NightLight> {
         ReadableValue._100})
     private int intensity;
 
-    public NightLight(Class<NightLight> tType, String resource) throws Exception {
+    public NightLight() throws Exception {
         super(NightLight.class, RESOURCE);
     }
 
