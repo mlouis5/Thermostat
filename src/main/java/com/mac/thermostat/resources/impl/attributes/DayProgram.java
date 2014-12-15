@@ -82,7 +82,6 @@ public class DayProgram {
 
     public void addToProgram(Minute minute, Temperature temperature) {
         if (Objects.nonNull(minute) && Objects.nonNull(temperature)) {
-            System.out.println(minute + "   " + temperature);
             values.put(minute, temperature);
         }
     }
@@ -101,5 +100,25 @@ public class DayProgram {
 
     public Set<Entry<Minute, Temperature>> getEntries() {
         return values.entrySet();
+    }    
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 53 * hash + Objects.hashCode(this.day);
+        return hash;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final DayProgram other = (DayProgram) obj;
+        return Objects.equals(this.day, other.day);
+    }
+    
 }
